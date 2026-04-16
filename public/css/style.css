@@ -1,0 +1,197 @@
+header {
+    width: 100%;
+}
+
+.top-header {
+    background-color: #E8F1EF; /* Warna latar belakang untuk bagian atas header */
+    padding: 7px 0;
+    font-size: 14px;
+    border-bottom: 0px solid #e5e5e5;
+}
+
+.top-header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.contact-info {
+    color: #666;
+}
+
+.header-right a {
+    margin-left: 15px;
+    color: #666;
+    text-decoration: none;
+}
+
+.header-right a:hover {
+    color: #0B773D;
+}
+
+.main-header {
+    background-color: #E8F1EF ; /* Mengubah warna latar belakang menjadi #F0FEED */
+    padding: 20px 0;
+}
+
+.main-header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo img {
+    max-width: 200px;
+}
+
+.main-nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.main-nav ul li a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 600;
+    padding: 10px 0;
+}
+
+.main-nav ul li a:hover {
+    color: #0B773D;
+}
+
+.header-icons a {
+    margin-left: 15px;
+    color: #333;
+}
+
+.header-icons a:hover {
+    color: #0B773D;
+}
+
+.cart-count {
+    background-color: #0B773D;
+    border-radius: 50%;
+    color: white;
+    padding: 3px 8px;
+    font-size: 12px;
+    position: relative;
+    top: -10px;
+    right: -10px;
+}
+
+.header-icons {
+    display: flex;
+    align-items: center;
+}
+
+.header-icons .form-control {
+    margin-right: 5px; /* Jarak antara input dan tombol */
+}
+
+.header-icons .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem; /* Sesuaikan padding sesuai kebutuhan */
+}
+
+.header-custom {
+    position: fixed; /* Tetap di atas saat di-scroll */
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 999; /* Agar selalu berada di depan elemen lain */
+    background-color: #E8F1EF; /* Pastikan warna background solid */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Opsional: Menambahkan bayangan agar lebih menonjol */
+}
+
+body {
+    padding-top: 120px; /* Sesuaikan padding-top dengan tinggi header agar konten tidak tertutup */
+    font-family: 'Poppins', sans-serif;
+}
+
+footer.bg-light {
+    background-color: #E8F1EF !important; /* Menggunakan !important untuk memastikan aturan ini diterapkan */
+}
+
+.main-nav ul li a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 600;
+    padding: 10px 0;
+    transition: color 0.3s ease; /* Menambahkan transisi agar lebih halus */
+}
+
+/* Saat hover atau active */
+.main-nav ul li a:hover,
+.main-nav ul li a.active {
+    color: #0B773D; /* Warna saat hover dan saat aktif */
+    font-weight: bold; /* Menambahkan ketebalan font pada item aktif */
+}
+
+.cart-container {
+    width: 80%;
+    margin: auto;
+    border-collapse: collapse;
+}
+
+.cart-container th, .cart-container td {
+    padding: 15px;
+    text-align: left;
+}
+
+.cart-container th {
+    background-color: #f5f5f5;
+}
+
+.product-info {
+    display: flex;
+    align-items: center;
+}
+
+.product-info img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    margin-right: 15px;
+}
+
+.product-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.product-price {
+    color: red;
+    font-weight: bold;
+}
+
+.product-discount {
+    text-decoration: line-through;
+    color: #888;
+    margin-left: 5px;
+}
+
+.quantity-control {
+    display: flex;
+    align-items: center;
+}
+
+.quantity-control input {
+    width: 40px;
+    text-align: center;
+}
+
+.remove-item {
+    color: #999;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.total-price {
+    font-weight: bold;
+}
+
+
