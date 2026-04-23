@@ -11,6 +11,11 @@ use App\Http\Controllers\LogstokController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\KeranjangController;
+use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\RiwayatBelanjaController;
+use App\Http\Controllers\PenjualanController;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Http\Request;
 
 // ALL USERS
 Route::get('/', function () {
@@ -40,6 +45,47 @@ Route::put('/edit-profile', [UserController::class, 'updateUser'])->name('update
 Route::resource('keranjangs', KeranjangController::class);
 Route::post('/keranjang/tambah/{id}', [KeranjangController::class, 'tambah']);
 Route::get('/keranjang', [KeranjangController::class, 'show'])->name('keranjang.show');
+Route::get('/checkout', [CheckoutController::class, 'show'])->name('checkout.show');
+Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+Route::get('/checkout/{id}/detail', [CheckoutController::class, 'detail'])->name('checkout.detail');
+
+Route::get('/provinsi', function () {
+    return Http::withHeaders([
+        'key' => env('KOMERCE_KEY')
+    ])->get('https://rajaongkir.komerce.id/api/v1/destination/province')->json();
+});
+Route::get('/kota/{id}', function ($id) {
+    return Http::withHeaders([
+        'key' => env('KOMERCE_KEY')
+    ])->get("https://rajaongkir.komerce.id/api/v1/destination/city/$id")->json();
+});
+Route::post('/cek-ongkir', function (Request $request) {
+
+    $response = Http::withHeaders([
+        'key' => env('KOMERCE_KEY')
+    ])
+    ->asForm()
+    ->post('https://rajaongkir.komerce.id/api/v1/calculate/district/domestic-cost', [
+        'origin' => 501,
+        'destination' => $request->destination,
+        'weight' => $request->weight,
+        'courier' => $request->courier
+    ]);
+
+    if ($response->failed()) {
+        return response()->json([
+            'error' => true,
+            'message' => $response->body()
+        ]);
+    }
+
+    return response()->json($response->json());
+
+})->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class]);
+
+Route::post('/riwayat-belanja/{id}/ulasan', [RiwayatBelanjaController::class, 'simpanUlasan'])->name('riwayatBelanja.simpanUlasan');
+Route::get('/riwayat-belanja', [RiwayatBelanjaController::class, 'index'])->name('riwayat-belanja');
+Route::post('/upload-bukti/{id}', [RiwayatBelanjaController::class, 'uploadBukti'])->name('upload.bukti');
 
 
 // ADMIN
@@ -57,4 +103,10 @@ Route::get('/contact-us/cetak/pdf', [ContactusController::class, 'cetakPDF'])->n
 Route::get('/contact-us/{id}/edit', [ContactusController::class, 'edit'])->name('contactuses.edit');
 Route::get('/contact-us/{id}', [ContactusController::class, 'show'])->name('contactuses.show');
 Route::put('/contact-us/{id}', [ContactusController::class, 'update'])->name('contactuses.update');
-Route::delete('/contact-us/{id}', [ContactusController::class, 'destroy'])->name('contactuses.destroy');
+Route::delete('/contact-us/{id}', [ContactusController::class, 'destroy'])->name('contactuses.destroy');Route::get('/dashboard-pesanan', [CheckoutController::class, 'showPesanan'])->name('checkouts.pesanan');
+Route::get('/dashboard-pesanan/{id}', [CheckoutController::class, 'show'])->name('checkouts.show');
+Route::post('/dashboard-pesanan/{id}/confirm', [CheckoutController::class, 'confirm'])->name('checkouts.confirm');
+Route::put('/checkouts/{id}/update-status', [CheckoutController::class, 'updateStatus'])->name('checkouts.updateStatus');
+Route::put('/checkouts/{id}/update-pembayaran', [CheckoutController::class, 'updatePembayaran'])->name('checkouts.updatePembayaran');
+Route::resource('/dashboard-penjualan', PenjualanController::class);
+Route::get('/cetak-pdf/penjualan', [PenjualanController::class, 'cetakPdf'])->name('penjualan.cetak_pdf');

@@ -1,24 +1,16 @@
 <nav class="pc-sidebar">
-    <div class="navbar-wrapper">
-        <div class="m-header" style="
-            background: linear-gradient(to right, #f4f4f4, #ffffff);
-            padding: 10px 15px;
-            border-radius: 4px;
-        ">
-            <link href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap" rel="stylesheet">
-            <a href="/welcome" class="b-brand" style="text-decoration: none;">
-                <span style="
-                    font-family: 'Marcellus', serif;
-                    font-size: 1rem;
-                    color: #2f4f4f;
-                    letter-spacing: 2px;
-                ">
-                    Botol Plastik Riau
-                </span>
-            </a>
+    <div class="m-header sidebar-logo">
+        <div class="logo-wrapper">
+            <div class="logo-icon">
+                <i class="fas fa-bottle-water"></i>
+            </div>
+
+            <div class="logo-text">
+                <span class="logo-title">Botol Plastik</span>
+                <small class="logo-subtitle">RIAU</small>
+            </div>
         </div>
     </div>
-
     <div class="navbar-content">
         <ul class="pc-navbar">
             <li class="pc-item">
@@ -94,36 +86,92 @@
 </nav>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 <style>
+    .sidebar-logo {
+        padding: 18px 16px;
+        margin: 12px;
+        border-radius: 16px;
+        background: linear-gradient(135deg, #ffffff, #f8fafc);
+        box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+        border: 1px solid #e2e8f0;
+    }
+
+    .logo-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .logo-icon {
+        width: 46px;
+        height: 46px;
+        border-radius: 14px;
+        background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 20px;
+        box-shadow: 0 4px 10px rgba(30, 58, 138, 0.2);
+    }
+
+    .logo-text {
+        display: flex;
+        flex-direction: column;
+        line-height: 1.1;
+    }
+
+    .logo-title {
+        font-family: 'Marcellus', serif;
+        font-size: 20px;
+        color: #1e3a8a;
+        font-weight: 600;
+        letter-spacing: 1px;
+    }
+
+    .logo-subtitle {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 4px;
+        color: #64748b;
+    }
+
+    /* ICON DEFAULT */
     .pc-micon i {
-    font-size: 18px;
-    font-weight: 300;
-    color: #5a6c7d;
-    transition: 0.3s;
+        font-size: 18px;
+        font-weight: 300;
+        color: #5a6c7d;
+        transition: all 0.3s ease;
     }
 
-    .pc-link:hover .pc-micon i {
-        color: #0d6efd;
-        transform: scale(1.1);
+    /* HOVER */
+    .pc-link:hover {
+        background: #eff6ff;
+        border-radius: 10px;
     }
-    /* ACTIVE STATE → warna donker */
+
+    .pc-link:hover .pc-micon i,
+    .pc-link:hover .pc-mtext {
+        color: #1e3a8a;
+        transform: scale(1.05);
+    }
+
+    /* ACTIVE / ON CLICK */
     .pc-item.active > .pc-link {
-        background: #0b2a4a !important;  /* donker */
+        background: linear-gradient(135deg, #1e3a8a, #3b82f6) !important;
         color: #ffffff !important;
-        border-right: 4px solid #082033;  /* donker lebih gelap */
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(30, 58, 138, 0.25);
+        border-right: none !important;
     }
 
-    /* Icon ikut putih saat aktif */
+    /* ICON ACTIVE */
     .pc-item.active > .pc-link .pc-micon i {
         color: #ffffff !important;
     }
-    /* Hilangkan border kanan bawaan */
-    .pc-item.active > .pc-link {
-        background: #0b2a4a !important;  /* donker */
+
+    /* TEXT ACTIVE */
+    .pc-item.active > .pc-link .pc-mtext {
         color: #ffffff !important;
-        border-right: none !important;   /* HAPUS GARIS BIRU */
-    }
-    /* Icon ikut putih saat aktif */
-    .pc-item.active > .pc-link .pc-micon i {
-        color: #ffffff !important;
+        font-weight: 600;
     }
 </style>

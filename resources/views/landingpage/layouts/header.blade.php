@@ -16,7 +16,6 @@
 
             <!-- ICONS + LOGIN -->
             <div class="icons-modern d-flex align-items-center ">
-
                 <form action="/semuaproduk" method="GET" id="searchForm" class="search-box d-none d-md-flex align-items-center">
                     <i class="bi bi-search"></i>
                     <input type="text" id="searchInput" name="search" placeholder="Cari produk..." value="{{ request('search') }}">
@@ -73,7 +72,6 @@
             <div class="carousel-item active">
                 <section class="hero-section d-flex align-items-center"
                     style="background-image: url('/storage/botol.jpeg');">
-
                     <div class="container position-relative">
                         <div class="row">
                             <div class="col-lg-6 text-center text-lg-start text-white">
@@ -88,7 +86,6 @@
                             </div>
                         </div>
                     </div>
-
                 </section>
             </div>
 

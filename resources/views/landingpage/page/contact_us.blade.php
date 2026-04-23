@@ -190,4 +190,31 @@
 
     </div>
 </section>
+
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center fw-bold mb-4" style="font-size: 2rem;">Lokasi Toko Kami</h2>
+            <div class="row align-items-start">
+                <div class="col-md-6 mb-3">
+                    <div class="p-4 shadow-sm rounded-4 bg-white">
+                        <h5 class="fw-semibold mb-2">Alamat</h5>
+                        <p class="text-muted" style="line-height: 1.6; font-size: 1rem;">
+                            Jl. Paus, Tangkerang Tengah, <br>
+                            Kec. Marpoyan Damai, Kota Pekanbaru, Riau 28282 <br>
+                            <strong>Telp:</strong> 0813-7120-9486
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="shadow rounded-4 overflow-hidden" style="height: 320px;">
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.676019660362!2d101.43423387480247!3d0.48391139951135864!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31d5af5e32d63709%3A0xf474b06ffe293fb4!2sBotol%20Plastik%20Riau!5e0!3m2!1sid!2sid!4v1775547929862!5m2!1sid!2sid"
+                            width="100%" height="100%" style="border:0;" allowfullscreen loading="lazy">
+                        </iframe>
+                </div>
+            </div>
+        </h2>
+    </div>
+</section>
+
 @endsection

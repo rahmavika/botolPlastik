@@ -12,9 +12,6 @@
                     🛒 Keranjang Belanja
                 </h4>
 
-                <!-- FORM CHECKOUT -->
-                <form action="/checkout" method="GET" id="checkoutForm">
-
                 <div class="table-responsive">
                     <table class="table align-middle">
                         <thead class="text-muted" style="font-size: 0.85rem;">
@@ -47,6 +44,7 @@
                                     <input type="checkbox"
                                            class="check-item"
                                            name="selected_items[]"
+                                           form="checkoutForm"
                                            value="{{ $keranjang->id }}"
                                            data-total="{{ $keranjang->jumlah * $keranjang->harga }}"
                                            {{ $keranjang->jumlah > $stokTersedia ? 'disabled' : '' }}>
@@ -143,29 +141,31 @@
                     </div>
                 @else
 
-                <!-- TOTAL & CHECKOUT -->
-                <div class="d-flex justify-content-between align-items-center mt-4 flex-wrap gap-3">
+                <!-- FORM CHECKOUT (DIPINDAH KE SINI) -->
+                <form action="/checkout" method="GET" id="checkoutForm">
 
-                    <h5 class="fw-bold mb-0">
-                        Total:
-                        <span id="totalHarga" style="color:#0d6efd;">
-                            Rp 0
-                        </span>
-                    </h5>
+                    <div class="d-flex justify-content-between align-items-center mt-4 flex-wrap gap-3">
 
-                    <button type="submit"
-                       id="btnCheckout"
-                       class="btn px-4 py-2 {{ $stokKurang ? 'disabled' : '' }}"
-                       style="background:#0d6efd; color:#fff; border-radius:10px;"
-                       disabled>
-                        Checkout
-                    </button>
+                        <h5 class="fw-bold mb-0">
+                            Total:
+                            <span id="totalHarga" style="color:#0d6efd;">
+                                Rp 0
+                            </span>
+                        </h5>
 
-                </div>
+                        <button type="submit"
+                           id="btnCheckout"
+                           class="btn px-4 py-2 {{ $stokKurang ? 'disabled' : '' }}"
+                           style="background:#0d6efd; color:#fff; border-radius:10px;"
+                           disabled>
+                            Checkout
+                        </button>
 
-                @endif
+                    </div>
 
                 </form>
+
+                @endif
 
             </div>
         </div>

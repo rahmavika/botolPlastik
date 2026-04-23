@@ -7,7 +7,6 @@
     <h1 class="h2">Data Produk</h1>
 </div>
 
-<a href="/dashboard-stok/create" class="btn btn-primary mb-3">+Produk</a>
 <table id=stokTable class="table table-dashboard">
     <thead>
         <tr>
