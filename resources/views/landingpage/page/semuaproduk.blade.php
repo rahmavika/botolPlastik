@@ -251,166 +251,198 @@ document.querySelectorAll('.plus').forEach(btn => {
 
 {{-- STYLE MODERN --}}
 <style>
+    /* BACKGROUND */
+    body {
+        background: #f5f7fa;
+    }
 
-
+    /* ================= HEADER ================= */
     .section-header-advanced {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0; /* hilangkan box feel */
-    background: transparent; /* ini kunci transparan */
-    box-shadow: none; /* hilangkan bayangan */
-}
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #e5e7eb;
+        padding-bottom: 10px;
+    }
 
-.section-header-advanced .left h4 {
-    margin: 0;
-    font-weight: 600;
-    color: #1a1a1a;
-    letter-spacing: 0.5px;
-}
+    .section-header-advanced .left h4 {
+        margin: 0;
+        font-weight: 600;
+        color: #111827;
+        font-size: 18px;
+    }
 
-.section-header-advanced .left span {
-    font-size: 12px;
-    color: #888;
-}
+    .section-header-advanced .left span {
+        font-size: 12px;
+        color: #6b7280;
+    }
 
-.section-header-advanced .right {
-    font-size: 20px;
-    color: #072258;
-    opacity: 0.7;
-}
-.product-card-modern {
-    background: #fff;
-    border-radius: 18px;
-    overflow: hidden;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-    transition: 0.3s;
-    position: relative;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-}
+    /* SEARCH */
+    .search-box {
+        display: flex;
+        align-items: center;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        overflow: hidden;
+        background: #fff;
+    }
 
-.product-card-modern:hover {
-    transform: translateY(-6px);
-}
+    .search-input {
+        border: none;
+        padding: 6px 10px;
+        font-size: 13px;
+        outline: none;
+        width: 160px;
+    }
 
-.product-img-modern {
-    height: 170px;
-    background: #f6f7f9;
-}
+    .search-btn {
+        border: none;
+        background: #072258;
+        color: #fff;
+        padding: 6px 10px;
+    }
 
-.product-img-modern img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
+    /* ================= PRODUCT CARD ================= */
+    .product-card-modern {
+        background: #fff;
+        border-radius: 10px; /* 🔥 lebih formal */
+        border: 1px solid #e5e7eb;
+        overflow: hidden;
+        transition: 0.2s;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
 
-.product-body-modern {
-    padding: 12px;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
+    .product-card-modern:hover {
+        transform: translateY(-3px);
+    }
 
-.product-title-modern {
-    font-size: 14px;
-    font-weight: 600;
-    min-height: 35px;
-}
+    /* IMAGE */
+    .product-img-modern {
+        height: 160px;
+        background: #f9fafb;
+    }
 
-.product-desc-modern {
-    font-size: 12px;
-    color: #888;
-    height: 28px;
-    overflow: hidden;
-}
+    .product-img-modern img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 0; /* 🔥 hilangkan lengkung */
+    }
 
-.price-modern {
-    font-weight: bold;
-    color: #072258; /* dari biru ke donker */
-    font-size: 15px;
-}
-.bottom-section {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: auto;
-}
+    /* BODY */
+    .product-body-modern {
+        padding: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
 
-.qty-box-modern {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    background: #f1f3f5;
-    padding: 3px 6px;
-    border-radius: 8px;
-}
+    .product-title-modern {
+        font-size: 14px;
+        font-weight: 600;
+        min-height: 34px;
+        color: #111827;
+    }
 
-.qty-box-modern button {
-    border: none;
-    background: transparent;
-    font-weight: bold;
-    cursor: pointer;
-}
+    .product-desc-modern {
+        font-size: 12px;
+        color: #6b7280;
+        height: 28px;
+        overflow: hidden;
+    }
 
-.btn-cart-modern {
-    background: #072258; /* dari biru ke donker */
-    border: none;
-    color: white;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+    /* PRICE */
+    .price-modern {
+        font-weight: 600;
+        color: #072258;
+        font-size: 14px;
+    }
 
-.btn-cart-modern:hover {
-    background: #072258; /* hover lebih gelap */
-}
+    /* ================= BOTTOM ================= */
+    .bottom-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: auto;
+    }
 
-.badge-habis {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    background: red;
-    color: #fff;
-    font-size: 11px;
-    padding: 4px 8px;
-    border-radius: 6px;
-}
-.section-header-advanced {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0; /* hilangkan box feel */
-    background: transparent; /* ini kunci transparan */
-    box-shadow: none; /* hilangkan bayangan */
-}
+    /* QTY */
+    .qty-box-modern {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        background: #f3f4f6;
+        padding: 3px 6px;
+        border-radius: 6px; /* 🔥 lebih kecil */
+    }
 
-.section-header-advanced .left h4 {
-    margin: 0;
-    font-weight: 600;
-    color: #1a1a1a;
-    letter-spacing: 0.5px;
-}
+    .qty-box-modern button {
+        border: none;
+        background: transparent;
+        font-weight: 600;
+        cursor: pointer;
+        font-size: 13px;
+    }
 
-.section-header-advanced .left span {
-    font-size: 12px;
-    color: #888;
-}
+    /* CART BUTTON */
+    .btn-cart-modern {
+        background: #072258;
+        border: none;
+        color: white;
+        width: 34px;
+        height: 34px;
+        border-radius: 6px; /* 🔥 dari bulat jadi kotak soft */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 
-.section-header-advanced .right {
-    font-size: 20px;
-    color: #072258;
-    opacity: 0.7;
-}
-.section-header-advanced {
-    border-bottom: 1px solid #eee;
-    padding-bottom: 10px;
-}
+    .btn-cart-modern:hover {
+        background: #051a45;
+    }
 
+    /* BADGE HABIS */
+    .badge-habis {
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        background: #dc2626;
+        color: #fff;
+        font-size: 11px;
+        padding: 3px 6px;
+        border-radius: 4px; /* 🔥 kecil */
+    }
+
+    /* ================= MODAL ================= */
+    .modal-info,
+    .modal-success {
+        border-radius: 10px;
+        border: none;
+    }
+
+    .icon-box i {
+        font-size: 28px;
+        color: #f59e0b;
+    }
+
+    .success-icon i {
+        font-size: 32px;
+        color: #16a34a;
+    }
+
+    .btn-login {
+        background: #072258;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 6px;
+    }
+
+    .btn-login:hover {
+        background: #051a45;
+    }
 </style>
 
 @endsection

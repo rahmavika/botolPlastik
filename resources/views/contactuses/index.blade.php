@@ -7,9 +7,6 @@
 <div class="d-flex justify-content-between flex-wrap flex--md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">Pertanyaan Masuk</h1>
 </div>
-<a href="{{ route('contactuses.cetak_pdf') }}" target="_blank" class="btn btn-outline-danger mb-3">
-    <i class='bx bxs-file-pdf'></i> Cetak PDF
-</a>
 <table id="pertanyaanTable" class="table table-dashboard">
     <thead>
         <tr>

@@ -36,14 +36,18 @@ class ContactusController extends Controller
             'pertanyaan' => 'required|string|max:1000',
         ]);
 
-        Contactus::create($request->only('nama', 'email', 'pertanyaan'));
+        Contactus::create([
+            'nama' => $request->nama,
+            'email' => $request->email,
+            'pertanyaan' => $request->pertanyaan,
+            'is_published' => 0 // ⬅️ WAJIB DITAMBAHKAN
+        ]);
 
         return back()->with([
-            'success' => 'Pertanyaan berhasil dikirim!',
+            'contact_success' => 'Pertanyaan berhasil dikirim!',
             'alert_type' => 'tambah'
         ]);
     }
-
     public function index(Request $request)
     {
         $query = ContactUs::query();
@@ -112,14 +116,4 @@ class ContactusController extends Controller
             'alert_type' => 'hapus'
         ]);
     }
-
-    /**
-     * Cetak PDF daftar semua pertanyaan
-     */
-    // public function cetakPDF()
-    // {
-    //     $questions = ContactUs::orderBy('created_at', 'desc')->get();
-    //     $pdf = Pdf::loadView('contactuses.cetak_pdf', compact('questions'));
-    //     return $pdf->stream('laporan-contact-us.pdf');
-    // }
 }

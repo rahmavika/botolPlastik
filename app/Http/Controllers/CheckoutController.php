@@ -37,15 +37,22 @@ class CheckoutController extends Controller
     }
     public function updateStatus(Request $request, $id)
     {
-        $request->validate([
-            'status' => 'required|string'
-        ]);
-
         $checkout = Checkout::findOrFail($id);
+
+        if ($request->status == 'dikirim') {
+
+            $request->validate([
+                'no_resi' => 'required|string|max:100'
+            ]);
+
+            $checkout->no_resi = $request->no_resi;
+            $checkout->tanggal_kirim = now();
+        }
+
         $checkout->status = $request->status;
         $checkout->save();
 
-        return redirect()->back()->with('success', 'Status pesanan berhasil diperbarui.');
+        return back()->with('success', 'Status berhasil diperbarui.');
     }
 
         public function updatePembayaran(Request $request, $id)
@@ -190,5 +197,20 @@ class CheckoutController extends Controller
             'totalBelanja'    => $totalBelanja,
             'totalHargaAkhir' => $totalBelanja,
         ]);
+    }
+    public function inputResi(Request $request, $id)
+    {
+        $request->validate([
+            'no_resi' => 'required|string|max:100'
+        ]);
+
+        $checkout = Checkout::findOrFail($id);
+
+        $checkout->no_resi = $request->no_resi;
+        $checkout->tanggal_kirim = now();
+        $checkout->status = 'dikirim';
+        $checkout->save();
+
+        return back()->with('success', 'Resi berhasil ditambahkan');
     }
 }

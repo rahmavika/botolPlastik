@@ -8,7 +8,6 @@
 </div>
 
 <a href="/dashboard-produk/create" class="btn btn-primary mb-3">+Produk</a>
-<a href="/cetak/produk" target="_blank" class="btn btn-success mb-3">Cetak PDF</a>
 <table id=produkTable class="table table-dashboard">
     <thead>
         <tr>
@@ -63,52 +62,62 @@
 
 <!-- Modal Detail Produk -->
 <div class="modal fade" id="detailModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-      <div class="modal-content shadow-lg">
-        <div class="modal-header bg-primary text-white">
-          <h5 class="modal-title">
-            <i class="bi bi-box-seam"></i> Detail Produk
-          </h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-        </div>
-        <div class="modal-body p-4">
-          <div class="row g-4">
-            <div class="col-md-4 text-center">
-              <img id="detailGambar" src="" class="img-fluid rounded shadow-sm border mb-2" style="max-height: 220px; object-fit: cover;">
-              <div class="small text-muted">Gambar Produk</div>
-            </div>
-            <div class="col-md-8">
-              <div class="card border-0">
-                <div class="card-body p-0">
-                  <div class="mb-3">
-                    <label class="form-label fw-bold text-muted">Nama Produk</label>
-                    <div class="p-2 border rounded bg-light" id="detailNama"></div>
-                  </div>
-                  <div class="mb-3">
-                    <label class="form-label fw-bold text-muted">Keterangan</label>
-                    <div class="p-2 border rounded bg-light" id="detailKeterangan"></div>
-                  </div>
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border">
 
-                  <div class="row">
-                    <div class="col-md-6 mb-3">
-                      <label class="form-label fw-bold text-muted">Harga</label>
-                      <div class="p-2 border rounded bg-light" id="detailHarga"></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+        {{-- HEADER --}}
+        <div class="modal-header">
+          <h5 class="modal-title">Detail Produk</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
+
+        {{-- BODY --}}
+        <div class="modal-body">
+
+          <div class="row">
+
+            {{-- Gambar --}}
+            <div class="col-md-4 text-center mb-3">
+              <img id="detailGambar"
+                   src=""
+                   class="img-fluid border"
+                   style="max-height:160px; object-fit:cover;">
+            </div>
+
+            {{-- Detail --}}
+            <div class="col-md-8">
+
+              <div class="mb-2">
+                <label class="form-label">Nama Produk</label>
+                <div class="form-control" id="detailNama"></div>
+              </div>
+
+              <div class="mb-2">
+                <label class="form-label">Keterangan</label>
+                <div class="form-control" id="detailKeterangan"></div>
+              </div>
+
+              <div class="mb-2">
+                <label class="form-label">Harga</label>
+                <div class="form-control" id="detailHarga"></div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        {{-- FOOTER --}}
         <div class="modal-footer">
           <button class="btn btn-secondary" data-bs-dismiss="modal">
-            <i class="bi bi-x-circle"></i> Tutup
+            Tutup
           </button>
         </div>
+
       </div>
     </div>
-  </div>
-
+</div>
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>

@@ -98,8 +98,8 @@
                         <i class="bi bi-envelope-fill me-2"></i> Hubungi Kami
                     </h4>
 
-                    @if(session('success'))
-                        <div class="alert alert-success">{{ session('success') }}</div>
+                    @if(session('contact_success'))
+                        <div class="alert alert-success">{{ session('contact_success') }}</div>
                     @endif
 
                     <form action="{{ route('contact_us.store') }}" method="POST">

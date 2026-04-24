@@ -1,44 +1,65 @@
 @extends('layouts.main')
 
 @section('content')
-<div class="container mt-4">
-    <div class="card shadow-sm">
-        <div class="card-header bg-dark text-white fw-bold">
-            Laporan Mutasi Stok - {{ \Carbon\Carbon::createFromDate(null, $bulan)->locale('id')->monthName }} {{ $tahun }}
+<div class="container-md mt-4">
+
+    <div class="card shadow-sm border-0">
+
+        {{-- HEADER (LIGHT CLEAN) --}}
+        <div class="card-header bg-white border-bottom py-3">
+            <h6 class="mb-0 text-dark fw-semibold">
+                Laporan Mutasi Stok -
+                {{ \Carbon\Carbon::createFromDate(null, $bulan)->locale('id')->monthName }}
+                {{ $tahun }}
+            </h6>
         </div>
-        <div class="card-body">
-            <a href="{{ route('logstoks.index') }}" class="btn btn-secondary mb-3">← Kembali</a>
+
+        <div class="card-body py-3">
+
+            {{-- BUTTON --}}
+            <a href="{{ route('logstoks.index') }}" class="btn btn-outline-secondary btn-sm mb-3">
+                ← Kembali
+            </a>
+
+            {{-- TABLE --}}
             <div class="table-responsive">
-                <table class="table table-bordered text-center">
+                <table class="table table-bordered table-sm align-middle text-center mb-0">
+
                     <thead class="table-light">
                         <tr>
-                            <th>No</th>
-                            <th style="text-align: left;">Nama Produk</th>
-                            <th>Stok Awal</th>
-                            <th>Stok Masuk</th>
-                            <th>Stok Keluar</th>
-                            <th>Stok Akhir</th>
+                            <th style="width: 60px;">No</th>
+                            <th class="text-start">Nama Produk</th>
+                            <th style="width: 120px;">Stok Awal</th>
+                            <th style="width: 120px;">Stok Masuk</th>
+                            <th style="width: 120px;">Stok Keluar</th>
+                            <th style="width: 120px;">Stok Akhir</th>
                         </tr>
                     </thead>
+
                     <tbody>
                         @forelse ($dataMutasi as $index => $item)
                             <tr>
                                 <td>{{ $index + 1 }}</td>
-                                <td style="text-align: left;">{{ $item->nama_produk }}</td>
+                                <td class="text-start">{{ $item->nama_produk }}</td>
                                 <td>{{ $item->stok_awal }}</td>
                                 <td>{{ $item->masuk }}</td>
                                 <td>{{ $item->keluar }}</td>
-                                <td>{{ $item->stok_akhir }}</td>
+                                <td class="fw-semibold">{{ $item->stok_akhir }}</td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="9" class="text-center">Tidak ada data mutasi stok untuk periode ini.</td>
+                                <td colspan="6" class="text-center py-3 text-muted">
+                                    Tidak ada data mutasi stok untuk periode ini.
+                                </td>
                             </tr>
                         @endforelse
                     </tbody>
+
                 </table>
             </div>
+
         </div>
     </div>
+
 </div>
 @endsection

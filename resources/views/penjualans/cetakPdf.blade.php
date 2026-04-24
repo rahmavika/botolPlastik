@@ -2,160 +2,231 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Laporan Penjualan</title>
     <style>
         body {
             font-family: "Times New Roman", Times, serif;
+            font-size: 12px;
             margin: 0;
-            padding: 0;
             color: #000;
         }
+
         .container {
             width: 100%;
             max-width: 1000px;
             margin: auto;
-            padding: 20px;
+            padding: 10px 15px;
         }
+
+        /* KOP */
         .kop-surat {
-            display: flex;
-            align-items: center;
-            border-bottom: 3px solid #000;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
+            border-bottom: 2px solid #000;
+            padding-bottom: 6px;
+            margin-bottom: 10px;
         }
-        .kop-surat img {
-            width: 90px;
-            height: auto;
-            margin-right: 15px;
-        }
-        .kop-surat .info {
-            text-align: left;
-        }
-        .kop-surat .info h2 {
+
+        .kop-surat h2 {
             margin: 0;
-            font-size: 20px;
+            font-size: 16px;
             font-weight: bold;
         }
-        .kop-surat .info p {
-            margin: 2px 0;
-            font-size: 14px;
+
+        .kop-surat p {
+            margin: 1px 0;
+            font-size: 12px;
         }
+
+        /* JUDUL */
         .judul {
             text-align: center;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
+
         .judul h3 {
             margin: 0;
-            text-transform: uppercase;
-            font-size: 18px;
-            font-weight: bold;
-        }
-        .judul p {
-            margin: 3px 0;
             font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
         }
+
+        .judul p {
+            margin: 2px 0;
+            font-size: 12px;
+        }
+
+        /* TABEL */
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 14px;
-            margin-bottom: 20px;
+            font-size: 11.5px;
+            margin-top: 5px;
         }
+
         th, td {
-            border: 1px solid #000;
-            padding: 6px 8px;
-            word-wrap: break-word;
+            border: 1px solid #555;
+            padding: 4px 6px;
+            vertical-align: top;
         }
+
         th {
-            background-color: #f2f2f2;
+            background-color: #eaeaea;
             text-align: center;
             font-weight: bold;
         }
+
+        td.text-center { text-align: center; }
+        td.text-end { text-align: right; }
+
         tfoot td {
             font-weight: bold;
         }
+
+        /* FOOTER */
         .footer {
-            margin-top: 40px;
+            margin-top: 30px;
             display: flex;
             justify-content: flex-end;
-            text-align: center;
         }
+
         .ttd {
-            margin-left: 50px;
             text-align: center;
+            font-size: 12px;
         }
+
+        .ttd p {
+            margin: 2px 0;
+        }
+
         @page {
             size: A4 portrait;
-            margin: 15mm;
+            margin: 12mm;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="kop-surat">
-            <div class="info">
-                <h2>A.W. Karya Bangunan</h2>
-                <p>Jl. Mesjid, Sungai Pua, Kec. Sungai Pua, Kabupaten Agam, Sumatera Barat 26181</p>
-                <p>Telp: (0752) 691374</p>
-            </div>
-        </div>
-        <div class="judul">
-            <h3>Laporan Penjualan</h3>
-            <p>Periode: <strong>{{ $bulan }} {{ $tahun }}</strong></p>
-        </div>
-        @if($message)
-            <p style="color: red; font-weight: bold; text-align: center;">{{ $message }}</p>
-        @else
-        <table>
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Tanggal Pemesanan</th>
-                    <th>Nama Customer</th>
-                    <th>Rincian Produk</th>
-                    <th>Total Harga</th>
-                    <th>Alamat Pengiriman</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($checkouts as $checkout)
-                <tr>
-                    <td class="text-center">{{ $loop->iteration }}</td>
-                    <td class="text-center">{{ $checkout->tanggal_pemesanan->format('d-m-Y') }}</td>
-                    <td>{{ $checkout->user->name ?? '-' }}</td>
-                    <td>
-                        @foreach($checkout->produk_details as $produk)
-                            @php
-                                $namaProduk = is_array($produk) ? ($produk['nama_produk'] ?? $produk['nama'] ?? '-')
-                                                                : ($produk->nama_produk ?? $produk->nama ?? '-');
-                                $jumlah = is_array($produk) ? ($produk['jumlah'] ?? 0) : ($produk->jumlah ?? 0);
-                                $harga  = is_array($produk) ? ($produk['harga'] ?? 0)  : ($produk->harga ?? 0);
-                            @endphp
-                            {{ $namaProduk }} ({{ $jumlah }} x Rp {{ number_format($harga, 0, ',', '.') }})<br>
-                        @endforeach
-                    </td>
-                    <td class="text-end">Rp {{ number_format($checkout->total_harga, 0, ',', '.') }}</td>
-                    <td>{{ $checkout->alamat_pengiriman }}</td>
-                </tr>
-                @endforeach
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="4" style="text-align: right;">Total Penjualan:</td>
-                    <td colspan="2">Rp {{ number_format($totalPenjualan, 0, ',', '.') }}</td>
-                </tr>
-            </tfoot>
-        </table>
-        @endif
-        <div class="footer">
-            <div class="ttd">
-                <p>Sungai Pua, {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}</p>
-                <p>Pimpinan</p>
-                <br><br><br>
-                <p><strong>________________________</strong></p>
-            </div>
-        </div>
 
+<div class="container">
+
+    {{-- KOP --}}
+    <div class="kop-surat">
+        <h2>Botol Plastik Riau</h2>
+        <p>Jl. Paus, Tengkerang Tengah, Kec. Marpoyan Damai, Kota Pekanbaru, Riau</p>
+        <p>Telp: 081371209486</p>
     </div>
+
+    {{-- JUDUL --}}
+    <div class="judul">
+        <h3>Laporan Penjualan</h3>
+        <p>Periode: <strong>{{ $bulan }} {{ $tahun }}</strong></p>
+    </div>
+
+    @if($message)
+        <p style="color:red; text-align:center; font-weight:bold;">{{ $message }}</p>
+    @else
+
+    @php
+        $totalProduk = 0;
+        $totalOngkir = 0;
+    @endphp
+
+    {{-- TABEL --}}
+    <table>
+        <thead>
+            <tr>
+                <th width="4%">No</th>
+                <th width="11%">Tanggal</th>
+                <th width="14%">Customer</th>
+                <th>Rincian Produk</th>
+                <th width="12%">Subtotal</th>
+                <th width="10%">Ongkir</th>
+                <th width="15%">Total</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach($checkouts as $checkout)
+            @php
+                $ongkir = $checkout->ongkir ?? 0;
+                $total = $checkout->total_harga;
+                $produkOnly = $total - $ongkir;
+
+                $totalProduk += $produkOnly;
+                $totalOngkir += $ongkir;
+            @endphp
+
+            <tr>
+                <td class="text-center">{{ $loop->iteration }}</td>
+
+                <td class="text-center">
+                    {{ $checkout->tanggal_pemesanan->format('d-m-Y') }}
+                </td>
+
+                <td>{{ $checkout->user->name ?? '-' }}</td>
+
+                <td>
+                    @foreach($checkout->produk_details as $produk)
+                        @php
+                            $namaProduk = is_array($produk) ? ($produk['nama_produk'] ?? $produk['nama'] ?? '-') : ($produk->nama_produk ?? $produk->nama ?? '-');
+                            $jumlah = is_array($produk) ? ($produk['jumlah'] ?? 0) : ($produk->jumlah ?? 0);
+                            $harga  = is_array($produk) ? ($produk['harga'] ?? 0)  : ($produk->harga ?? 0);
+                        @endphp
+                        {{ $namaProduk }} ({{ $jumlah }} x {{ number_format($harga,0,',','.') }})<br>
+                    @endforeach
+                </td>
+
+                <td class="text-end">
+                    Rp {{ number_format($produkOnly, 0, ',', '.') }}
+                </td>
+
+                <td class="text-end">
+                    Rp {{ number_format($ongkir, 0, ',', '.') }}
+                </td>
+
+                <td class="text-end">
+                    Rp {{ number_format($total, 0, ',', '.') }}
+                </td>
+            </tr>
+            @endforeach
+        </tbody>
+
+        {{-- TOTAL --}}
+        <tfoot>
+            <tr>
+                <td colspan="4" class="text-end">Subtotal Produk</td>
+                <td colspan="3">
+                    Rp {{ number_format($totalProduk, 0, ',', '.') }}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" class="text-end">Total Ongkir</td>
+                <td colspan="3">
+                    Rp {{ number_format($totalOngkir, 0, ',', '.') }}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" class="text-end"><strong>Total Keseluruhan</strong></td>
+                <td colspan="3">
+                    <strong>
+                        Rp {{ number_format($totalProduk + $totalOngkir, 0, ',', '.') }}
+                    </strong>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+
+    @endif
+
+    {{-- TTD --}}
+    <div class="footer">
+        <div class="ttd">
+            <p>Riau, {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}</p>
+            <p>Pimpinan</p>
+            <br><br>
+            <p><strong>____________________</strong></p>
+        </div>
+    </div>
+
+</div>
+
 </body>
 </html>

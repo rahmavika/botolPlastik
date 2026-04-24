@@ -110,3 +110,4 @@ Route::put('/checkouts/{id}/update-status', [CheckoutController::class, 'updateS
 Route::put('/checkouts/{id}/update-pembayaran', [CheckoutController::class, 'updatePembayaran'])->name('checkouts.updatePembayaran');
 Route::resource('/dashboard-penjualan', PenjualanController::class);
 Route::get('/cetak-pdf/penjualan', [PenjualanController::class, 'cetakPdf'])->name('penjualan.cetak_pdf');
+Route::post('/input-resi/{id}', [CheckoutController::class, 'inputResi']);
