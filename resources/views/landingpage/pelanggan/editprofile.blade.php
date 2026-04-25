@@ -39,7 +39,7 @@
                                    value="{{ Auth::user()->name }}"
                                    required>
 
-                            @error('name')
+                            @error('name','update-profile')
                                 <div class="invalid-feedback d-block">{{ $message }}</div>
                             @enderror
                         </div>

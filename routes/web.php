@@ -14,6 +14,7 @@ use App\Http\Controllers\KeranjangController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\RiwayatBelanjaController;
 use App\Http\Controllers\PenjualanController;
+use App\Http\Controllers\MutasistokController;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 
@@ -86,6 +87,7 @@ Route::post('/cek-ongkir', function (Request $request) {
 Route::post('/riwayat-belanja/{id}/ulasan', [RiwayatBelanjaController::class, 'simpanUlasan'])->name('riwayatBelanja.simpanUlasan');
 Route::get('/riwayat-belanja', [RiwayatBelanjaController::class, 'index'])->name('riwayat-belanja');
 Route::post('/upload-bukti/{id}', [RiwayatBelanjaController::class, 'uploadBukti'])->name('upload.bukti');
+Route::post('/checkout/terima/{id}', [RiwayatBelanjaController::class, 'terimaPesanan']);
 
 
 // ADMIN
@@ -94,9 +96,12 @@ Route::resource('/dashboard-produk', ProdukController::class);
 Route::resource('/dashboard-stok', StokController::class);
 Route::post('/stok/tambah/{produk_id}', [StokController::class, 'tambah'])->name('stok.tambah');
 Route::post('/stok/kurangi/{produk_id}', [StokController::class, 'kurangi'])->name('stok.kurangi');
-Route::get('/dashboard-mutasi', [LogstokController::class, 'index'])->name('logstoks.index');
-Route::get('/dashboard-mutasi/cetak', [LogstokController::class, 'cetak'])->name('logstoks.cetak');
-Route::get('/dashboard-mutasi/{bulan}/{tahun}', [LogstokController::class, 'show'])->name('logstoks.show');
+Route::get('/dashboard-log', [LogstokController::class, 'index'])->name('logstoks.index');
+Route::get('/dashboard-log/cetak', [LogstokController::class, 'cetak'])->name('logstoks.cetak');
+Route::get('/dashboard-log/{bulan}/{tahun}', [LogstokController::class, 'show'])->name('logstoks.show');
+Route::get('/dashboard-mutasi', [MutasistokController::class, 'index'])->name('mutasistoks.index');
+Route::get('/dashboard-mutasi/cetak', [MutasistokController::class, 'cetak'])->name('mutasistoks.cetak');
+Route::get('/dashboard-mutasi/{bulan}/{tahun}', [MutasistokController::class, 'show'])->name('mutasistoks.show');
 Route::resource('/dashboard-pengguna', UserController::class);
 Route::get('/contact-us', [ContactusController::class, 'index'])->name('contactuses.index');
 Route::get('/contact-us/cetak/pdf', [ContactusController::class, 'cetakPDF'])->name('contactuses.cetak_pdf');
@@ -106,7 +111,7 @@ Route::put('/contact-us/{id}', [ContactusController::class, 'update'])->name('co
 Route::delete('/contact-us/{id}', [ContactusController::class, 'destroy'])->name('contactuses.destroy');Route::get('/dashboard-pesanan', [CheckoutController::class, 'showPesanan'])->name('checkouts.pesanan');
 Route::get('/dashboard-pesanan/{id}', [CheckoutController::class, 'show'])->name('checkouts.show');
 Route::post('/dashboard-pesanan/{id}/confirm', [CheckoutController::class, 'confirm'])->name('checkouts.confirm');
-Route::put('/checkouts/{id}/update-status', [CheckoutController::class, 'updateStatus'])->name('checkouts.updateStatus');
+Route::put('/checkouts/{id}', [CheckoutController::class, 'updateStatus'])->name('checkouts.updateStatus');
 Route::put('/checkouts/{id}/update-pembayaran', [CheckoutController::class, 'updatePembayaran'])->name('checkouts.updatePembayaran');
 Route::resource('/dashboard-penjualan', PenjualanController::class);
 Route::get('/cetak-pdf/penjualan', [PenjualanController::class, 'cetakPdf'])->name('penjualan.cetak_pdf');

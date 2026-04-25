@@ -7,7 +7,6 @@
         background: #f5f7fa;
     }
 
-    /* CARD */
     .card-clean {
         background: #ffffff;
         border-radius: 10px;
@@ -20,7 +19,6 @@
         font-size: 18px;
     }
 
-    /* TABLE */
     .table-clean thead th {
         font-size: 13px;
         text-transform: uppercase;
@@ -40,14 +38,12 @@
         background: #f9fafb;
     }
 
-    /* LINK */
     .link-date {
         color: #1d4ed8;
         text-decoration: none;
         font-weight: 500;
     }
 
-    /* STATUS */
     .status {
         font-size: 12px;
         padding: 4px 10px;
@@ -62,7 +58,6 @@
     .status-belum    { background: #fff7ed; color: #9a3412; }
     .status-lunas    { background: #ecfdf5; color: #065f46; }
 
-    /* BUTTON */
     .btn-clean {
         font-size: 12px;
         padding: 5px 12px;
@@ -80,7 +75,6 @@
         border: none;
     }
 
-    /* MODAL */
     .modal-custom {
         display: none;
         position: fixed;
@@ -116,9 +110,7 @@
 
         <div class="card card-clean p-4">
 
-            <h4 class="text-center mb-4 title-clean">
-                Riwayat Belanja
-            </h4>
+            <h4 class="text-center mb-4 title-clean">Riwayat Belanja</h4>
 
             <div class="table-responsive">
                 <table class="table table-clean">
@@ -130,6 +122,7 @@
                             <th>Bukti</th>
                             <th>Status</th>
                             <th>Pembayaran</th>
+                            <th>Aksi</th>
                         </tr>
                     </thead>
 
@@ -149,24 +142,34 @@
                                 Rp {{ number_format($checkout->total_harga, 0, ',', '.') }}
                             </td>
 
-                            {{-- BUKTI --}}
+                            {{-- BUKTI TRANSFER --}}
                             <td id="button-cell-{{ $checkout->id }}">
-                                @if($checkout->bukti_transfer)
-                                    <button class="btn-primary-clean"
-                                        onclick="showPreview('{{ asset($checkout->bukti_transfer) }}')">
-                                        Lihat
-                                    </button>
-                                @else
-                                    <button class="btn-clean"
-                                        onclick="document.getElementById('fileInput{{ $checkout->id }}').click()">
-                                        Upload
-                                    </button>
 
-                                    <input type="file"
-                                        id="fileInput{{ $checkout->id }}"
-                                        style="display:none;"
-                                        onchange="uploadBukti({{ $checkout->id }})">
+                                @if($checkout->metode_pembayaran === 'transfer')
+
+                                    @if($checkout->bukti_transfer)
+                                        <button class="btn-primary-clean"
+                                            onclick="showPreview('{{ asset($checkout->bukti_transfer) }}')">
+                                            Lihat
+                                        </button>
+                                    @else
+                                        <button class="btn-clean"
+                                            onclick="document.getElementById('fileInput{{ $checkout->id }}').click()">
+                                            Upload
+                                        </button>
+
+                                        <input type="file"
+                                            id="fileInput{{ $checkout->id }}"
+                                            style="display:none;"
+                                            onchange="uploadBukti({{ $checkout->id }})">
+                                    @endif
+
+                                @else
+                                    <span style="font-size:12px; color:#6b7280;">
+                                        Tidak diperlukan (COD)
+                                    </span>
                                 @endif
+
                             </td>
 
                             {{-- STATUS --}}
@@ -199,6 +202,30 @@
                                 @endswitch
                             </td>
 
+                            {{-- AKSI --}}
+                            <td>
+                                @if($checkout->status === 'dikirim')
+
+                                    <button class="btn-primary-clean"
+                                        onclick="terimaPesanan({{ $checkout->id }})">
+                                        Pesanan Diterima
+                                    </button>
+
+                                @elseif($checkout->status === 'selesai')
+
+                                    <span style="font-size:12px; color:#065f46; font-weight:600;">
+                                        Sudah Diterima
+                                    </span>
+
+                                @else
+
+                                    <span style="font-size:12px; color:#9ca3af;">
+                                        -
+                                    </span>
+
+                                @endif
+                            </td>
+
                         </tr>
                         @endforeach
                     </tbody>
@@ -211,11 +238,10 @@
             </div>
 
         </div>
-
     </div>
 </section>
 
-{{-- MODAL PREVIEW --}}
+{{-- MODAL --}}
 <div id="previewModal" class="modal-custom">
     <span class="close-btn" onclick="closePreview()">×</span>
     <img id="previewImage">
@@ -231,7 +257,6 @@ function closePreview() {
     document.getElementById('previewModal').style.display = 'none';
 }
 
-/* klik luar */
 window.onclick = function(e) {
     let modal = document.getElementById('previewModal');
     if (e.target === modal) {
@@ -239,14 +264,11 @@ window.onclick = function(e) {
     }
 }
 
-/* ESC */
 document.addEventListener('keydown', function(e) {
-    if (e.key === "Escape") {
-        closePreview();
-    }
+    if (e.key === "Escape") closePreview();
 });
 
-/* upload */
+/* UPLOAD BUKTI */
 function uploadBukti(id) {
     let fileInput = document.getElementById('fileInput' + id);
     let formData = new FormData();
@@ -262,12 +284,29 @@ function uploadBukti(id) {
     .then(data => {
         if (data.success) {
             alert('Berhasil upload');
+            location.reload();
+        }
+    });
+}
 
-            document.getElementById('button-cell-' + id).innerHTML =
-                `<button class="btn-primary-clean"
-                    onclick="showPreview('${data.bukti_path}')">
-                    Lihat
-                </button>`;
+/* TERIMA PESANAN */
+function terimaPesanan(id) {
+    if (!confirm('Apakah pesanan sudah diterima?')) return;
+
+    fetch('/checkout/terima/' + id, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            alert('Pesanan berhasil dikonfirmasi');
+            location.reload();
+        } else {
+            alert('Gagal update status');
         }
     });
 }

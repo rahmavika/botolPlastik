@@ -149,7 +149,7 @@ class UserController extends Controller
                 'phone' => $validated['phone'],
             ]);
 
-            return redirect()->back()->with('success', 'Profil berhasil diperbarui!');
+            return redirect()->back()->with('success_profile', 'Profil berhasil diperbarui!');
 
         } catch (\Exception $e) {
             Log::error('Error saat menyimpan data pengguna: ' . $e->getMessage());

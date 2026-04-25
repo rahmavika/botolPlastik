@@ -55,7 +55,7 @@
 
                     <thead>
                         <tr class="text-center">
-                            <th>Alamat</th>
+                            <th>Nama</th>
                             <th>Detail</th>
                             <th>Total</th>
                             <th>Pembayaran</th>
@@ -78,7 +78,7 @@
                         <tr>
 
                             <td style="max-width:200px;">
-                                {{ $checkout->alamat_pengiriman }}
+                                {{ $checkout->nama_pelanggan ?? $checkout->user->name ?? '-' }}
                             </td>
 
                             <td class="text-center">
@@ -133,16 +133,55 @@
                                 <form action="{{ route('checkouts.updateStatus',$checkout->id) }}" method="POST">
                                     @csrf @method('PUT')
 
+                                    {{-- 🔵 MENUNGGU KONFIRMASI --}}
                                     @if($checkout->status=='menunggu_konfirmasi')
-                                        <button name="status" value="diproses" class="btn btn-sm btn-outline-warning">Proses</button>
 
+                                        {{-- COD → langsung boleh proses --}}
+                                        @if($checkout->metode_pembayaran == 'cod')
+                                            <button name="status" value="diproses"
+                                                class="btn btn-sm btn-outline-warning">
+                                                Proses
+                                            </button>
+                                            <small class="d-block text-info">COD (bayar di tempat)</small>
+
+                                        {{-- TRANSFER --}}
+                                        @elseif($checkout->metode_pembayaran != 'cod')
+
+                                            @if($checkout->status_pembayaran == 'lunas')
+                                                <button name="status" value="diproses"
+                                                    class="btn btn-sm btn-outline-warning">
+                                                    Proses
+                                                </button>
+                                            @else
+                                                <button class="btn btn-sm btn-secondary" disabled>
+                                                    Menunggu Bayar
+                                                </button>
+                                                <small class="d-block text-danger">Belum diverifikasi</small>
+                                            @endif
+
+                                        @endif
+
+
+                                    {{-- 🟡 DIPROSES --}}
                                     @elseif($checkout->status=='diproses')
-                                        <button type="button" class="btn btn-sm btn-outline-secondary"
-                                            onclick="inputResi({{ $checkout->id }})">Kirim</button>
 
+                                        <button type="button"
+                                            class="btn btn-sm btn-outline-secondary"
+                                            onclick="inputResi({{ $checkout->id }})">
+                                            Kirim
+                                        </button>
+
+
+                                    {{-- 🔵 DIKIRIM --}}
                                     @elseif($checkout->status=='dikirim')
-                                        <button name="status" value="selesai" class="btn btn-sm btn-outline-success">Selesai</button>
+
+                                        <button name="status" value="selesai"
+                                            class="btn btn-sm btn-outline-success">
+                                            Selesai
+                                        </button>
+
                                     @endif
+
                                 </form>
                             </td>
 

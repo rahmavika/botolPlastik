@@ -38,7 +38,30 @@ class RiwayatBelanjaController extends Controller
 
         return response()->json([
             'success' => true,
-            'bukti_path' => asset($filePath), 
+            'bukti_path' => asset($filePath),
+        ]);
+    }
+    public function terimaPesanan($id)
+    {
+        $checkout = Checkout::where('id', $id)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
+
+        // hanya bisa jika sudah dikirim
+        if ($checkout->status !== 'dikirim') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Pesanan belum bisa dikonfirmasi'
+            ]);
+        }
+
+        $checkout->update([
+            'status' => 'selesai'
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Pesanan berhasil diterima'
         ]);
     }
 

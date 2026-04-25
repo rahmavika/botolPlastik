@@ -312,6 +312,19 @@ document.querySelectorAll('.plus').forEach(btn => {
         display: flex;
         flex-direction: column;
         height: 100%;
+        position: relative;
+    }
+
+    .badge-habis {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        z-index: 5;
+        background: #dc2626;
+        color: #fff;
+        font-size: 11px;
+        padding: 4px 8px;
+        border-radius: 6px;
     }
 
     .product-card-modern:hover {

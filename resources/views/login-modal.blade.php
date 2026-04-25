@@ -45,13 +45,6 @@
                                style="width:45px; height:45px;">
                                 <img src="https://cdn-icons-png.flaticon.com/512/300/300221.png" width="20">
                             </a>
-
-                            <a href="{{ url('/auth/facebook') }}"
-                               class="rounded-circle d-flex align-items-center justify-content-center text-white"
-                               style="width:45px; height:45px; background:#1877f2;">
-                                <i class="bi bi-facebook"></i>
-                            </a>
-
                         </div>
                     </div>
 

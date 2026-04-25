@@ -343,7 +343,7 @@
             })
             .catch(err => {
                 console.log(err);
-                status.innerHTML = "❌ Gagal ambil ongkir";
+                status.innerHTML = "❌ Tidak Tersedia";
             });
         }
 
@@ -366,5 +366,44 @@
 
     });
 </script>
+@if(session('error_checkout'))
+    <script>
+    Swal.fire({
+        icon: 'error',
+        title: 'Gagal',
+        text: "{{ session('error_checkout') }}",
+        width: 300,
+        padding: '1em',
+        showConfirmButton: true,
+        confirmButtonText: 'OK',
+        buttonsStyling: false,
+        customClass: {
+            popup: 'rounded-3',
+            title: 'fs-6',
+            htmlContainer: 'small',
+            confirmButton: 'btn btn-sm btn-danger'
+        }
+    });
+    </script>
+
+@elseif(session('success_checkout'))
+    <script>
+    Swal.fire({
+        icon: 'success',
+        title: 'Berhasil',
+        text: "{{ session('success_checkout') }}",
+        width: 300,
+        padding: '1em',
+        confirmButtonText: 'OK',
+        buttonsStyling: false,
+        customClass: {
+            popup: 'rounded-3',
+            title: 'fs-6',
+            htmlContainer: 'small',
+            confirmButton: 'btn btn-sm btn-primary'
+        }
+    });
+    </script>
+@endif
 @endsection
 

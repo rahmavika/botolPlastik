@@ -35,9 +35,15 @@
                 </a>
             </li>
             <li class="pc-item">
-                <a href="/dashboard-mutasi" class="pc-link">
+                <a href="/dashboard-log" class="pc-link">
                     <span class="pc-micon"><i class="bi bi-box-seam"></i></span>
                     <span class="pc-mtext">Log Stok</span>
+                </a>
+            </li>
+            <li class="pc-item">
+                <a href="/dashboard-mutasi" class="pc-link">
+                    <span class="pc-micon"><i class="bi bi-arrow-left-right"></i></span>
+                    <span class="pc-mtext">Mutasi Stok</span>
                 </a>
             </li>
             <li class="pc-item pc-caption">

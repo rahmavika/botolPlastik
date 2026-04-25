@@ -8,6 +8,8 @@ use App\Models\Keranjang;
 use App\Models\Stok;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
 
 class CheckoutController extends Controller
 {
@@ -40,7 +42,6 @@ class CheckoutController extends Controller
         $checkout = Checkout::findOrFail($id);
 
         if ($request->status == 'dikirim') {
-
             $request->validate([
                 'no_resi' => 'required|string|max:100'
             ]);
@@ -65,7 +66,7 @@ class CheckoutController extends Controller
     }
     public function store(Request $request)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'alamat_pengiriman' => 'required|string|max:255',
             'metode_pembayaran' => 'required|string',
             'total_harga' => 'required|numeric|min:0',
@@ -74,70 +75,88 @@ class CheckoutController extends Controller
             'ongkir' => 'nullable|numeric'
         ]);
 
-        $user = Auth::user();
-        $selectedIds = $request->selected_items;
-
-        $keranjangs = Keranjang::with('produk')
-            ->where('user_id', $user->id)
-            ->whereIn('id', $selectedIds)
-            ->get();
-
-        if ($keranjangs->isEmpty()) {
-            return redirect()->route('keranjang.show')->with('error', 'Keranjang Anda kosong!');
+        // ❗ VALIDASI GAGAL
+        if ($validator->fails()) {
+            return back()
+                ->withErrors($validator, 'checkout')
+                ->withInput()
+                ->with('error_checkout', 'Gagal membuat pesanan, cek data kamu!');
         }
 
-        $totalHargaProduk = $keranjangs->sum(fn($k) => $k->jumlah * $k->harga);
-        $ongkir = $request->ongkir ?? 0;
-        $totalAkhir = $totalHargaProduk + $ongkir;
+        try {
 
-        $produkDetails = $keranjangs->map(function ($item) {
-            return [
-                'nama' => $item->produk->nama_produk,
-                'jumlah' => $item->jumlah,
-                'harga' => $item->harga,
-                'total' => $item->jumlah * $item->harga,
-            ];
-        })->toArray();
+            $user = Auth::user();
+            $selectedIds = $request->selected_items;
 
-        $checkout = Checkout::create([
-            'user_id' => $user->id,
-            'alamat_pengiriman' => $request->alamat_pengiriman,
-            'courier' => $request->courier,
-            'service' => $request->service,
-            'ongkir' => $ongkir,
-            'total_harga' => $totalAkhir,
-            'produk_details' => $produkDetails,
-            'tanggal_pemesanan' => now(),
-            'metode_pembayaran' => $request->metode_pembayaran,
-            'status_pembayaran' => 'belum_lunas',
-            'status' => 'menunggu_konfirmasi',
-        ]);
+            $keranjangs = Keranjang::with('produk')
+                ->where('user_id', $user->id)
+                ->whereIn('id', $selectedIds)
+                ->get();
 
-        foreach ($keranjangs as $item) {
-            $stok = Stok::where('produk_id', $item->produk_id)->first();
-
-            if ($stok) {
-                $stok->jumlah_stok -= $item->jumlah;
-                if ($stok->jumlah_stok < 0) {
-                    $stok->jumlah_stok = 0;
-                }
-                $stok->save();
+            if ($keranjangs->isEmpty()) {
+                return redirect()->route('keranjang.show')
+                    ->with('error_checkout', 'Keranjang Anda kosong!');
             }
 
-            Logstok::create([
-                'tanggal' => now(),
-                'produk_id' => $item->produk_id,
-                'tipe' => 'keluar',
-                'jumlah' => $item->jumlah,
-                'keterangan' => 'penjualan',
-                'created_by' => $user->id,
+            $totalHargaProduk = $keranjangs->sum(fn($k) => $k->jumlah * $k->harga);
+            $ongkir = $request->ongkir ?? 0;
+            $totalAkhir = $totalHargaProduk + $ongkir;
+
+            $produkDetails = $keranjangs->map(function ($item) {
+                return [
+                    'nama' => $item->produk->nama_produk,
+                    'jumlah' => $item->jumlah,
+                    'harga' => $item->harga,
+                    'total' => $item->jumlah * $item->harga,
+                ];
+            })->toArray();
+
+            $checkout = Checkout::create([
+                'user_id' => $user->id,
+                'alamat_pengiriman' => $request->alamat_pengiriman,
+                'courier' => $request->courier,
+                'service' => $request->service,
+                'ongkir' => $ongkir,
+                'total_harga' => $totalAkhir,
+                'produk_details' => $produkDetails,
+                'tanggal_pemesanan' => now(),
+                'metode_pembayaran' => $request->metode_pembayaran,
+                'status_pembayaran' => 'belum_lunas',
+                'status' => 'menunggu_konfirmasi',
             ]);
+
+            // update stok
+            foreach ($keranjangs as $item) {
+                $stok = Stok::where('produk_id', $item->produk_id)->first();
+
+                if ($stok) {
+                    $stok->jumlah_stok -= $item->jumlah;
+                    $stok->jumlah_stok = max(0, $stok->jumlah_stok);
+                    $stok->save();
+                }
+
+                Logstok::create([
+                    'tanggal' => now(),
+                    'produk_id' => $item->produk_id,
+                    'tipe' => 'keluar',
+                    'jumlah' => $item->jumlah,
+                    'keterangan' => 'penjualan',
+                    'created_by' => $user->id,
+                ]);
+            }
+
+            Keranjang::whereIn('id', $selectedIds)->delete();
+
+            return redirect()
+                ->route('checkout.detail', $checkout->id)
+                ->with('success_checkout', 'Checkout berhasil dibuat!');
+
+        } catch (\Exception $e) {
+
+            Log::error('Checkout error: ' . $e->getMessage());
+
+            return back()->with('error_checkout', 'Terjadi kesalahan saat checkout!');
         }
-
-        Keranjang::whereIn('id', $selectedIds)->delete();
-
-        return redirect()->route('checkout.detail', $checkout->id)
-            ->with('success', 'Checkout berhasil dibuat.');
     }
 
     public function show(Request $request)
