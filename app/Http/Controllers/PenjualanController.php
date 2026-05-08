@@ -29,7 +29,6 @@ class PenjualanController extends Controller
     public function show($id)
     {
         $checkout = Checkout::findOrFail($id);
-
         return view('penjualans.detailPenjualan', compact('checkout'));
     }
 
@@ -55,7 +54,7 @@ class PenjualanController extends Controller
             'tahun' => $tahun ?: 'Semua Tahun',
             'bulan' => $namaBulan,
             'message' => $message,
-            'totalPenjualan' => $totalPenjualan, 
+            'totalPenjualan' => $totalPenjualan,
         ]);
 
         return $pdf->stream('Laporan-Penjualan.pdf');

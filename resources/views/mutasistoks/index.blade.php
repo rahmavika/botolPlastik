@@ -1,28 +1,36 @@
 @extends('layouts.main')
-
 @section('content')
 
-<div class="d-flex justify-content-between flex-wrap flex--md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">Log Stok</h1>
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-body d-flex justify-content-between align-items-center">
+        <div>
+            <h3 class="fw-bold mb-1">Mutasi Stok</h3>
+            <small class="text-muted">Pantau perpindahan dan perubahan stok barang</small>
+        </div>
+
+        <div>
+            <i class="bi bi-arrow-left-right fs-2 text-primary"></i>
+        </div>
+    </div>
 </div>
 <div class="container mt-4">
     <div class="card shadow-sm">
-        <div class="card-header bg-gradient-dark fw-bold">
-            <h6 class="mb-0" style="color: white">Laporan Mutasi Stok</h6>
-        </div>
-
         <div class="card-body">
-            <div class="px-3 py-2 mb-3">
-                <button class="btn btn-sm" style="background-color: white; border: 1px solid #a20f0f; color: #a20f0f;" data-bs-toggle="modal" data-bs-target="#modalCetakMutasi">
-                    <i class="bi bi-printer me-1" style="color: #a20f0f; font-size: 0.9rem;"></i>
-                    Cetak Laporan Mutasi Stok
+            <div class="d-flex justify-content-end mb-3">
+                <button
+                    class="btn d-flex align-items-center gap-2 px-4 py-2 shadow-sm border-0"
+                    style="background: linear-gradient(135deg, #3f66c4, #4f7df0); color: white; border-radius: 14px;"
+                    data-bs-toggle="modal"
+                    data-bs-target="#modalCetakMutasi">
+
+                    <i class="bi bi-printer-fill fs-6"></i>
+                    <span class="fw-semibold">Cetak Laporan Mutasi Stok</span>
                 </button>
             </div>
-
             <div class="modal fade" id="modalCetakMutasi" tabindex="-1" aria-labelledby="modalCetakMutasiLabel" aria-hidden="true">
                 <div class="modal-dialog modal-md modal-dialog-centered">
                     <div class="modal-content p-3">
-                        <form action="{{ route('logstoks.cetak') }}" method="GET" target="_blank">
+                        <form action="{{ route('mutasistoks.cetak') }}" method="GET" target="_blank">
                         <input type="hidden" name="filter" id="filterTypeMutasi" value="bulan">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="modalCetakMutasiLabel">Cetak Laporan Mutasi Stok</h5>
@@ -41,7 +49,6 @@
                                         </button>
                                     </li>
                                 </ul>
-
                                 <div class="tab-content" id="filterTabContentMutasi">
                                     <div class="tab-pane fade show active" id="bulan-mutasi" role="tabpanel" aria-labelledby="bulan-mutasi-tab">
                                         <div class="mb-3">
@@ -49,7 +56,6 @@
                                             <input type="month" name="bulan" class="form-control">
                                         </div>
                                     </div>
-
                                     <div class="tab-pane fade" id="tanggal-mutasi" role="tabpanel" aria-labelledby="tanggal-mutasi-tab">
                                         <div class="mb-3">
                                             <label class="form-label" style="color: black; font-weight: semibold;">Dari Tanggal</label>
@@ -62,7 +68,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="modal-footer">
                                 <button type="submit" class="btn btn-primary">
                                     <i class="bi bi-printer me-1"></i> Cetak
@@ -72,7 +77,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="table-responsive">
                 <table class="table table-hover text-center">
                     <thead class="table-light">
@@ -98,9 +102,11 @@
                                 <td>{{ $item->stok_keluar }}</td>
                                 <td>{{ $item->stok_akhir }}</td>
                                 <td>
-                                    <a href="{{ route('logstoks.show', [$item->bulan, $item->tahun]) }}"
-                                       class="btn btn-info btn-sm">
-                                        Detail
+                                    <a href="{{ route('mutasistoks.show', [$item->bulan, $item->tahun]) }}"
+                                       class="btn btn-sm d-inline-flex align-items-center gap-2 px-3 py-2 border-0 shadow-sm"
+                                       style="background: linear-gradient(135deg, #3f66c4, #4f7df0); color: white; border-radius: 12px;">
+
+                                        <i class="bi bi-eye-fill"></i>
                                     </a>
                                 </td>
                             </tr>
@@ -118,73 +124,67 @@
 @endsection
 
 @push('scripts')
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/index.js"></script>
+    <script>
+        const bulanInputMutasi = document.querySelector('input[name="bulan"]');
+        const fromInputMutasi = document.querySelector('input[name="from"]');
+        const toInputMutasi = document.querySelector('input[name="to"]');
+        const filterTypeMutasiInput = document.getElementById('filterTypeMutasi');
 
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/index.js"></script>
-
-<script>
-    const bulanInputMutasi = document.querySelector('input[name="bulan"]');
-    const fromInputMutasi = document.querySelector('input[name="from"]');
-    const toInputMutasi = document.querySelector('input[name="to"]');
-    const filterTypeMutasiInput = document.getElementById('filterTypeMutasi');
-
-    function setRequiredMutasi(tab) {
-        if (tab === 'bulan') {
-            bulanInputMutasi.required = true;
-            fromInputMutasi.required = false;
-            toInputMutasi.required = false;
-            fromInputMutasi.value = '';
-            toInputMutasi.value = '';
-            filterTypeMutasiInput.value = 'bulan';
-        } else {
-            bulanInputMutasi.required = false;
-            fromInputMutasi.required = true;
-            toInputMutasi.required = true;
-            bulanInputMutasi.value = '';
-            filterTypeMutasiInput.value = 'tanggal';
-        }
-    }
-
-    document.querySelectorAll('#filterTabMutasi button[data-bs-toggle="tab"]').forEach(tabBtn => {
-        tabBtn.addEventListener('shown.bs.tab', function (e) {
-            const targetId = e.target.getAttribute('data-bs-target').replace('#', '');
-            if (targetId === 'bulan-mutasi') {
-                setRequiredMutasi('bulan');
+        function setRequiredMutasi(tab) {
+            if (tab === 'bulan') {
+                bulanInputMutasi.required = true;
+                fromInputMutasi.required = false;
+                toInputMutasi.required = false;
+                fromInputMutasi.value = '';
+                toInputMutasi.value = '';
+                filterTypeMutasiInput.value = 'bulan';
             } else {
-                setRequiredMutasi('tanggal');
+                bulanInputMutasi.required = false;
+                fromInputMutasi.required = true;
+                toInputMutasi.required = true;
+                bulanInputMutasi.value = '';
+                filterTypeMutasiInput.value = 'tanggal';
+            }
+        }
+        document.querySelectorAll('#filterTabMutasi button[data-bs-toggle="tab"]').forEach(tabBtn => {
+            tabBtn.addEventListener('shown.bs.tab', function (e) {
+                const targetId = e.target.getAttribute('data-bs-target').replace('#', '');
+                if (targetId === 'bulan-mutasi') {
+                    setRequiredMutasi('bulan');
+                } else {
+                    setRequiredMutasi('tanggal');
+                }
+            });
+        });
+        const toPickerMutasi = flatpickr("#toMutasi", {
+            dateFormat: "Y-m-d",
+            maxDate: "today"
+        });
+        const fromPickerMutasi = flatpickr("#fromMutasi", {
+            dateFormat: "Y-m-d",
+            maxDate: "today",
+            onChange: function (selectedDates) {
+                if (selectedDates.length > 0) {
+                    let minToDate = new Date(selectedDates[0]);
+                    minToDate.setDate(minToDate.getDate() + 1);
+                    toPickerMutasi.set('minDate', minToDate);
+                }
             }
         });
-    });
-
-    const toPickerMutasi = flatpickr("#toMutasi", {
-        dateFormat: "Y-m-d",
-        maxDate: "today"
-    });
-
-    const fromPickerMutasi = flatpickr("#fromMutasi", {
-        dateFormat: "Y-m-d",
-        maxDate: "today",
-        onChange: function (selectedDates) {
-            if (selectedDates.length > 0) {
-                let minToDate = new Date(selectedDates[0]);
-                minToDate.setDate(minToDate.getDate() + 1);
-                toPickerMutasi.set('minDate', minToDate);
-            }
-        }
-    });
-
-    flatpickr("input[name='bulan']", {
-        dateFormat: "Y-m",
-        defaultDate: new Date(),
-        plugins: [
-            new monthSelectPlugin({
-                shorthand: true,
-                dateFormat: "Y-m",
-                theme: "light"
-            })
-        ]
-    });
-</script>
+        flatpickr("input[name='bulan']", {
+            dateFormat: "Y-m",
+            defaultDate: new Date(),
+            plugins: [
+                new monthSelectPlugin({
+                    shorthand: true,
+                    dateFormat: "Y-m",
+                    theme: "light"
+                })
+            ]
+        });
+    </script>
 @endpush

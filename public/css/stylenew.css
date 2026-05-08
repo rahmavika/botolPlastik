@@ -1,3 +1,45 @@
+/* =========================
+   RESPONSIVE GLOBAL
+========================= */
+@media (max-width: 768px) {
+
+    /* HEADER */
+    .nav-modern {
+        display: block !important;
+    }
+
+    .main-header-modern .container {
+        flex-wrap: wrap;
+    }
+
+    .brand-modern {
+        font-size: 1.2rem;
+    }
+
+    /* SEARCH */
+    .search-box {
+        width: 100%;
+        margin-top: 8px;
+    }
+
+    /* HERO */
+    .hero-section {
+        min-height: 300px;
+        text-align: center;
+        padding: 40px 0;
+    }
+
+    .hero-section h1 {
+        font-size: 1.5rem !important;
+    }
+
+    /* FOOTER */
+    .footer-modern {
+        text-align: center;
+    }
+
+}
+
 
 
 

@@ -1,19 +1,16 @@
 @extends('layouts.main')
-
 @section('title', 'Edit Jawaban Pertanyaan')
 @section('navContactUs', 'active')
-
 @section('content')
+
 <div class="card shadow-sm">
     <div class="card-header bg-white d-flex justify-content-between align-items-center">
         <h4 class="fw-bold text-dark mb-0">Edit Pertanyaan & Jawaban</h4>
     </div>
-
     <div class="card-body">
         <form action="{{ route('contactuses.update', $question->id) }}" method="POST">
             @csrf
             @method('PUT')
-
             <div class="mb-3">
                 <label class="form-label fw-semibold">Nama</label>
                 <input type="text" class="form-control bg-light" value="{{ $question->nama }}" readonly>
@@ -38,10 +35,14 @@
                 <label class="form-check-label fw-semibold" for="is_published">Tampilkan ke Publik (FAQ)</label>
             </div>
             <div class="d-flex justify-content-end gap-2">
-                <a href="{{ route('contactuses.index') }}" class="btn btn-secondary d-flex align-items-center">
+                <a href="{{ route('contactuses.index') }}"
+                    class="btn d-flex align-items-center text-white border-0"
+                    style="background: #6c757d; border-radius:10px;">
                     <i class="bx bx-arrow-back me-1"></i> Kembali
                 </a>
-                <button type="submit" class="btn btn-biru d-flex align-items-center">
+                <button type="submit"
+                    class="btn d-flex align-items-center text-white border-0"
+                    style="background: linear-gradient(90deg, #3457c8, #4f7df0); border-radius:10px;">
                     <i class="bx bx-save me-1"></i> Simpan
                 </button>
             </div>

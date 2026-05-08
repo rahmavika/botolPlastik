@@ -1,9 +1,7 @@
 @extends('landingpage.layouts.main')
-
 @section('content')
 
 <style>
-    /* Hero Section */
     .hero-section-custom {
         background: linear-gradient(135deg, #cfe7ff, #ffffff);
         padding: 90px 0;
@@ -22,8 +20,6 @@
         font-size: 1.15rem;
         color: #4d648d;
     }
-
-    /* Glass Card */
     .glass-card {
         background: rgba(255, 255, 255, 0.78);
         backdrop-filter: blur(14px);
@@ -36,8 +32,6 @@
         transform: translateY(-6px);
         box-shadow: 0 16px 30px rgba(0, 0, 0, 0.1);
     }
-
-    /* Form */
     .form-control {
         border-radius: 14px;
         padding: 12px 14px;
@@ -46,8 +40,6 @@
         border-color: #1e3f66 !important;
         box-shadow: 0 0 0 0.2rem rgba(30, 63, 102, .25);
     }
-
-    /* FAQ Styles */
     .faq-title-icon {
         color: #1e3f66;
         margin-right: 6px;
@@ -72,8 +64,6 @@
         box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         margin-bottom: 8px;
     }
-
-    /* Buttons */
     .btn-custom {
         background-color: #1e3f66;
         color: white;
@@ -86,55 +76,43 @@
         background-color: #16324d;
     }
 </style>
-{{-- Contact Form + FAQ --}}
+
 <section class="py-5">
     <div class="container">
         <div class="row g-4">
-
-            <!-- KIRI: FORM -->
             <div class="col-lg-6">
                 <div class="glass-card">
                     <h4 class="fw-bold mb-4 border-bottom pb-2" style="color:#1b2a41;">
                         <i class="bi bi-envelope-fill me-2"></i> Hubungi Kami
                     </h4>
-
                     @if(session('contact_success'))
                         <div class="alert alert-success">{{ session('contact_success') }}</div>
                     @endif
-
                     <form action="{{ route('contact_us.store') }}" method="POST">
                         @csrf
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Nama</label>
                             <input type="text" name="nama" class="form-control" required>
                         </div>
-
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Email</label>
                             <input type="email" name="email" class="form-control" required>
                         </div>
-
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Pesan</label>
                             <textarea name="pertanyaan" rows="4" class="form-control" required></textarea>
                         </div>
-
                         <button type="submit" class="btn btn-custom">
                             Kirim Pesan
                         </button>
                     </form>
                 </div>
             </div>
-
-            <!-- KANAN: FAQ + INFO -->
             <div class="col-lg-6">
-
-                <!-- FAQ -->
                 <div class="glass-card mb-4">
                     <h4 class="fw-bold mb-4 border-bottom pb-2">
                         <i class="bi bi-question-circle-fill"></i> FAQ
                     </h4>
-
                     @if($faqs->count())
                         <div class="accordion" id="faqAccordion">
                             @foreach ($faqs as $index => $faq)
@@ -156,38 +134,27 @@
                         </div>
                     @endif
                 </div>
-
-                <!-- INFO KONTAK -->
                 <div class="glass-card mb-3">
                     <h5 class="fw-bold mb-3">Info Kontak</h5>
                     <p><i class="bi bi-telephone"></i> 0813-7120-9486</p>
                     <p><i class="bi bi-envelope"></i>  plastikbotol491@gmail.com</p>
                     <p><i class="bi bi-geo-alt"></i> Pekanbaru, Riau</p>
                 </div>
-
-                <!-- WA BUTTON -->
                 <a href="https://wa.me/6281371209486" target="_blank"
                    class="btn w-100 rounded-pill mb-3"
                    style="background:#1b2a41; color:white;">
                     <i class="bi bi-whatsapp"></i> Chat WhatsApp
                 </a>
-
-                <!-- JAM OPERASIONAL -->
                 <div class="glass-card">
                     <h5 class="fw-bold mb-3">Jam Operasional</h5>
                     <p class="mb-1">Setiap Hari: 10.00 - 22.00</p>
                 </div>
-
             </div>
-
         </div>
-
-        <!-- CTA -->
         <div class="text-center mt-5">
             <h5 class="fw-bold">Butuh bantuan cepat?</h5>
             <p class="text-muted">Tim kami siap membantu Anda</p>
         </div>
-
     </div>
 </section>
 

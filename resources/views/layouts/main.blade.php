@@ -25,30 +25,58 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         .sidebar-hidden .pc-sidebar {
-        transform: translateX(-100%);
-        visibility: hidden;
-        position: absolute;
+            transform: translateX(-100%);
+            visibility: hidden;
+            position: absolute;
         }
-
         .sidebar-hidden main {
-        margin-left: 0 !important;
-        width: 100% !important;
+            margin-left: 0 !important;
+            width: 100% !important;
         }
-
         .sidebar-hidden .pc-header {
-        left: 0 !important;
-        width: 100% !important;
+            left: 0 !important;
+            width: 100% !important;
         }
         .pc-sidebar {
-        position: fixed;
-        left: 0;
-        top: 0;
-        height: 100%;
-        width: 250px;
-        background-color: #fff;
-        transform: translateX(0);
-        visibility: visible;
-        z-index: 1000;
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 280px;
+            background-color: #fff;
+            transform: translateX(0);
+            visibility: visible;
+            z-index: 1000;
+        }
+        .main-content{
+            margin-left: 280px;
+            padding: 24px;
+            padding-top: 24px;
+            min-height: 100vh;
+            background: #f8fafc;
+            transition: 0.3s ease;
+        }
+        .custom-header{
+            left: 280px;
+            width: calc(100% - 280px);
+            transition: 0.3s ease;
+        }
+        .sidebar-hidden .main-content{
+            margin-left: 0;
+        }
+        .sidebar-hidden .custom-header{
+            left: 0;
+            width: 100%;
+        }
+        @media (max-width: 991px){
+            .main-content{
+                margin-left: 0;
+                padding: 16px;
+            }
+            .custom-header{
+                left: 0;
+                width: 100%;
+            }
         }
     </style>
     <script>
@@ -78,14 +106,10 @@
 
 <body>
     @include('layouts.header')
-    <div class="container-fluid">
-        <div class="row">
-            @include('layouts.sidebar')
-            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4" style="margin-top: 100px;">
-                @yield('content')
-            </main>
-        </div>
-    </div>
+    @include('layouts.sidebar')
+    <main class="main-content">
+        @yield('content')
+    </main>
     <script src="{{ asset('js/apexcharts.min.js') }}"></script>
     <script src="{{ asset('js/dashboard-default.js') }}"></script>
     <script src="{{ asset('js/popper.min.js') }}"></script>
@@ -94,7 +118,6 @@
     <script src="{{ asset('js/custom-font.js') }}"></script>
     <script src="{{ asset('js/pcoded.js') }}"></script>
     <script src="{{ asset('js/feather.min.js') }}"></script>
-
     <script>
         feather.replace();
     </script>

@@ -95,7 +95,6 @@ class KeranjangController extends Controller
     public function update(Request $request, $id)
     {
         $keranjang = Keranjang::findOrFail($id);
-
         $stokTersedia = $keranjang->produk->stok->jumlah_stok ?? 0;
 
         if ($request->action === 'increase') {

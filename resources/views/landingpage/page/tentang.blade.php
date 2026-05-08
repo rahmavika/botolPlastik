@@ -3,7 +3,6 @@
 @section('navTentang', 'active')
 @section('content')
 
-<!-- PROFIL -->
 <section class="py-5">
     <div class="container">
         <div class="row align-items-center">
@@ -39,14 +38,12 @@
                     <p class="mb-0">Menjaga kualitas produk</p>
                 </div>
             </div>
-
             <div class="col-md-4">
                 <div class="p-4 shadow-sm rounded-4 h-100 bg-white">
                     <i class="bi bi-emoji-smile fs-2 mb-2" style="color:#1b2a41;"></i>
                     <p class="mb-0">Memberikan pelayanan terbaik</p>
                 </div>
             </div>
-
             <div class="col-md-4">
                 <div class="p-4 shadow-sm rounded-4 h-100 bg-white">
                     <i class="bi bi-box-seam fs-2 mb-2" style="color:#1b2a41;"></i>
@@ -57,7 +54,6 @@
     </div>
 </section>
 
-<!-- VISI MISI -->
 <section>
     <div class="container">
         <h3 class="text-center fw-bold mb-4">Visi & Misi Kami</h3>
@@ -85,7 +81,6 @@
     </div>
 </section>
 
-<!-- GALERI -->
 <section class="py-5">
     <div class="container">
         <h4 class="text-center fw-bold mb-4">Galeri Kami</h4>
@@ -134,36 +129,34 @@
     </div>
 </section>
 
-@endsection
-
 <style>
     .back-btn-clean {
-    display: inline-block;
-    background-color: #0D1321; /* warna yang kamu kirim */
-    color: #ffffff;
-    padding: 12px 28px;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 500;
-    text-decoration: none;
-    transition: 0.25s ease;
-}
-
-.back-btn-clean:hover {
-    background-color: #162036;
-    transform: translateY(-2px);
-}
-.galeri-card {
-    width: 100%;
-    height: 250px; /* tinggi sama semua */
-    overflow: hidden;
-    border-radius: 16px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-}
-
-.galeri-card img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* ini kunci biar rapi */
-}
+        display: inline-block;
+        background-color: #0D1321; /* warna yang kamu kirim */
+        color: #ffffff;
+        padding: 12px 28px;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 500;
+        text-decoration: none;
+        transition: 0.25s ease;
+    }
+    .back-btn-clean:hover {
+        background-color: #162036;
+        transform: translateY(-2px);
+    }
+    .galeri-card {
+        width: 100%;
+        height: 250px; /* tinggi sama semua */
+        overflow: hidden;
+        border-radius: 16px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    }
+    .galeri-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* ini kunci biar rapi */
+    }
 </style>
+@endsection
+

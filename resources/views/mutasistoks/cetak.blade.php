@@ -66,23 +66,16 @@
 
 <body>
 <div class="container">
-
-    {{-- KOP --}}
     <div class="kop-surat">
         <h1>Botol Plastik Riau</h1>
         <p>Jl. Paus, Tengkerang Tengah, Kec. Marpoyan Damai, Kota Pekanbaru, Riau</p>
         <p>Telp: 081371209486</p>
     </div>
-
     <div class="line"></div>
-
-    {{-- JUDUL --}}
     <div class="judul">
         <h2>Laporan Mutasi Stok</h2>
         <p>{{ $periodeLabel }}</p>
     </div>
-
-    {{-- TABEL --}}
     <table>
         <thead>
             <tr>
@@ -111,19 +104,15 @@
             @endforelse
         </tbody>
     </table>
-
-    {{-- FOOTER --}}
     <div class="footer">
         <p>Riau, {{ $tanggalCetak }}</p>
     </div>
-
     <div class="signature">
         <p>Mengetahui,</p>
         <p><strong>Pemilik Toko</strong></p>
         <br><br><br>
         <p>(______________________)</p>
     </div>
-
 </div>
 </body>
 </html>

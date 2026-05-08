@@ -158,7 +158,7 @@ class MutasiStokController extends Controller
         }
 
         $mutasiStoks = Logstok::with('produk')
-            ->whereBetween('tanggal', [$tanggalAwal, $tanggalAkhir])
+            ->where('tanggal', '<=', $tanggalAkhir) // ⬅️ INI KUNCINYA
             ->get()
             ->groupBy('produk_id')
             ->map(function ($logs) use ($tanggalAwal, $tanggalAkhir) {
@@ -187,7 +187,7 @@ class MutasiStokController extends Controller
                 ];
             })->values();
 
-        $pdf = PDF::loadView('mutasistok.cetak', [
+        $pdf = PDF::loadView('mutasistoks.cetak', [
             'dataMutasi'   => $mutasiStoks,
             'periodeLabel' => $periodeLabel,
             'filterType'   => $filterType,

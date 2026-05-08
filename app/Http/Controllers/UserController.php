@@ -45,7 +45,6 @@ class UserController extends Controller
         if ($currentUser->role === 'admin') {
             $validated['role'] = 'pelanggan';
         }
-
         $validated['password'] = \Illuminate\Support\Facades\Hash::make($validated['password']);
 
         User::create($validated);
@@ -121,14 +120,11 @@ class UserController extends Controller
 
         try {
             $user = User::findOrFail(Auth::id());
-
             $dataUpdate = [
                 'name' => $validated['name'],
                 'email' => $validated['email'],
                 'phone' => $validated['phone'],
             ];
-
-            // ✅ CEK PASSWORD LAMA
             if (!empty($validated['password'])) {
 
                 if (!Hash::check($validated['old_password'], $user->password)) {
@@ -136,13 +132,10 @@ class UserController extends Controller
                         'old_password' => 'Password lama tidak sesuai!'
                     ])->withInput();
                 }
-
                 $dataUpdate['password'] = Hash::make($validated['password']);
             }
 
             $user->update($dataUpdate);
-
-            // update session
             session([
                 'name' => $validated['name'],
                 'email' => $validated['email'],
@@ -150,16 +143,10 @@ class UserController extends Controller
             ]);
 
             return redirect()->back()->with('success_profile', 'Profil berhasil diperbarui!');
-
         } catch (\Exception $e) {
             Log::error('Error saat menyimpan data pengguna: ' . $e->getMessage());
 
             return redirect()->back()->withErrors('Terjadi kesalahan saat menyimpan data.');
         }
-    }
-    public function cetakPdf(){
-        $pdf = PDF::loadView('users.cetak', ['users' => User::all()]);
-        return $pdf->stream('Laporan-Data-Pengguna.pdf');
-        //return $pdf->download('Laporan-Data-Mahasiswa.pdf');
     }
 }

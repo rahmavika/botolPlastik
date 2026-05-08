@@ -19,7 +19,6 @@ class CheckoutController extends Controller
         $checkouts = Checkout::where('status', $status)
                             ->latest()
                             ->paginate(10);
-
         return view('pesanans.index', compact('checkouts', 'status'));
     }
 
@@ -56,7 +55,7 @@ class CheckoutController extends Controller
         return back()->with('success', 'Status berhasil diperbarui.');
     }
 
-        public function updatePembayaran(Request $request, $id)
+    public function updatePembayaran(Request $request, $id)
     {
         $checkout = Checkout::findOrFail($id);
         $checkout->status_pembayaran = $request->status_pembayaran;
@@ -75,7 +74,6 @@ class CheckoutController extends Controller
             'ongkir' => 'nullable|numeric'
         ]);
 
-        // ❗ VALIDASI GAGAL
         if ($validator->fails()) {
             return back()
                 ->withErrors($validator, 'checkout')
@@ -104,10 +102,12 @@ class CheckoutController extends Controller
 
             $produkDetails = $keranjangs->map(function ($item) {
                 return [
-                    'nama' => $item->produk->nama_produk,
-                    'jumlah' => $item->jumlah,
-                    'harga' => $item->harga,
-                    'total' => $item->jumlah * $item->harga,
+                    'produk_id' => $item->produk->id,
+                    'nama'      => $item->produk->nama_produk,
+                    'gambar'    => $item->produk->gambar, // ✅ WAJIB
+                    'jumlah'    => $item->jumlah,
+                    'harga'     => $item->harga,
+                    'total'     => $item->jumlah * $item->harga,
                 ];
             })->toArray();
 
@@ -125,7 +125,6 @@ class CheckoutController extends Controller
                 'status' => 'menunggu_konfirmasi',
             ]);
 
-            // update stok
             foreach ($keranjangs as $item) {
                 $stok = Stok::where('produk_id', $item->produk_id)->first();
 
@@ -162,16 +161,13 @@ class CheckoutController extends Controller
     public function show(Request $request)
     {
         $user = Auth::user();
-
         $selectedIds = $request->selected_items;
 
-        // VALIDASI
         if (!$selectedIds) {
             return redirect()->route('keranjang.show')
                 ->with('error', 'Pilih minimal 1 produk!');
         }
 
-        // AMBIL HANYA YANG DICENTANG
         $keranjangs = Keranjang::with(['produk.stok'])
             ->where('user_id', $user->id)
             ->whereIn('id', $selectedIds)
@@ -182,7 +178,6 @@ class CheckoutController extends Controller
                 ->with('error', 'Data tidak ditemukan!');
         }
 
-        // CEK STOK
         foreach ($keranjangs as $item) {
             $stok = $item->produk->stok;
             $sisaStok = $stok->jumlah_stok ?? 0;
@@ -205,7 +200,6 @@ class CheckoutController extends Controller
     {
         $checkout = Checkout::with('user')->findOrFail($id);
         $produkDetails = $checkout->produk_details ?? [];
-
         $totalBelanja = collect($produkDetails)->sum(function ($p) {
             return $p['total'];
         });
@@ -224,7 +218,6 @@ class CheckoutController extends Controller
         ]);
 
         $checkout = Checkout::findOrFail($id);
-
         $checkout->no_resi = $request->no_resi;
         $checkout->tanggal_kirim = now();
         $checkout->status = 'dikirim';

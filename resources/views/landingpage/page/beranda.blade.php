@@ -22,71 +22,42 @@
 </section>
 <section class="py-5">
     <div class="container">
-        <h2 class="text-center fw-bold mb-4">Produk Unggulan</h2>
+        <h2 class="text-center fw-bold mb-4">Seputar Toko</h2>
         <div class="row g-4 justify-content-center">
             <div class="col-md-3">
                 <div class="card border-0 shadow-sm rounded-4 position-relative h-100">
-                    <img src="/storage/gambar1.jpeg" class="card-img-top rounded-top-4">
-
+                    <img src="/storage/packing.jpg" class="card-img-top rounded-top-4">
                     <div class="card-body text-center">
-                        <h6 class="fw-semibold">Kotak Makan Plastik</h6>
-                        <p class="text-muted">Rp 5.000</p>
+                        <h6 class="fw-semibold">Kegiatan Packing</h6>
+                        <p class="text-muted">Proses pengemasan rapi & aman</p>
                     </div>
-                    <a href="#"
-                        class="btn rounded-circle position-absolute"
-                        style="bottom: 15px; right: 15px; width: 40px; height: 40px;
-                            display: flex; align-items: center; justify-content: center;
-                            background-color: #064c97; color: white;">
-                        <i class="bi bi-cart"></i>
-                    </a>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="card border-0 shadow-sm rounded-4 position-relative h-100">
-                    <img src="/storage/gambar2.jpeg" class="card-img-top rounded-top-4">
+                    <img src="/storage/gudang.jpg" class="card-img-top rounded-top-4">
                     <div class="card-body text-center">
-                        <h6 class="fw-semibold">Food Container Plastik Set (20 pcs)</h6>
-                        <p class="text-muted mb-0">Rp 10.000</p>
+                        <h6 class="fw-semibold">Stok Gudang</h6>
+                        <p class="text-muted">Ketersediaan barang siap kirim</p>
                     </div>
-                    <a href="#"
-                        class="btn rounded-circle position-absolute"
-                            style="bottom: 15px; right: 15px; width: 40px; height: 40px;
-                                display: flex; align-items: center; justify-content: center;
-                                background-color: #064c97; color: white;">
-                        <i class="bi bi-cart"></i>
-                    </a>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="card border-0 shadow-sm rounded-4 position-relative h-100">
-                    <img src="/storage/gambar3.jpeg" class="card-img-top rounded-top-4">
+                    <img src="/storage/kemasan.jpeg" class="card-img-top rounded-top-4">
                     <div class="card-body text-center">
-                        <h6 class="fw-semibold">Paper Bowl + Tutup (Set)</h6>
-                        <p class="text-muted mb-0">Rp 10.000</p>
+                        <h6 class="fw-semibold">Variasi Packaging</h6>
+                        <p class="text-muted">Beragam pilihan kemasan</p>
                     </div>
-                    <a href="#"
-                        class="btn rounded-circle position-absolute"
-                        style="bottom: 15px; right: 15px; width: 40px; height: 40px;
-                            display: flex; align-items: center; justify-content: center;
-                            background-color: #064c97; color: white;">
-                        <i class="bi bi-cart"></i>
-                    </a>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="card border-0 shadow-sm rounded-4 position-relative h-100">
-                    <img src="/storage/gambar4.jpeg" class="card-img-top rounded-top-4">
+                    <img src="/storage/pengiriman.jpeg" class="card-img-top rounded-top-4">
                     <div class="card-body text-center">
-                        <h6 class="fw-semibold">Kantong Plastik HD (Kuat & Tebal)</h6>
-                        <p class="text-muted mb-0">Rp 10.000</p>
+                        <h6 class="fw-semibold">Pengiriman</h6>
+                        <p class="text-muted">Siap dikirim ke seluruh daerah</p>
                     </div>
-                    <a href="#"
-                        class="btn rounded-circle position-absolute"
-                        style="bottom: 15px; right: 15px; width: 40px; height: 40px;
-                            display: flex; align-items: center; justify-content: center;
-                            background-color: #064c97; color: white;">
-                        <i class="bi bi-cart"></i>
-                    </a>
                 </div>
             </div>
         </div>

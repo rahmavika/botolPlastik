@@ -3,16 +3,22 @@
 @section('navUser', 'active')
 @section('content')
 
-<div class="d-flex justify-content-between flex-wrap flex--md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">Data Pengguna</h1>
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-body d-flex justify-content-between align-items-center">
+        <div>
+            <h3 class="fw-bold mb-1">Data Pengguna</h3>
+            <small class="text-muted">Kelola akun dan hak akses pengguna sistem</small>
+        </div>
+
+        <div>
+            <i class="bi bi-people-fill fs-2 text-info"></i>
+        </div>
+    </div>
 </div>
-
-<a href="/dashboard-pengguna/create" class="btn btn-primary mb-3">+Pengguna</a>
-@if (Auth::check() && Auth::user()->role === 'super_admin')
-    <a href="/cetak/pengguna" target="_blank" class="btn btn-success mb-3">Cetak PDF</a>
-@endif
-
-
+<a href="/dashboard-pengguna/create"class="btn mb-3"
+   style="background:linear-gradient(90deg, #365fcf, #4f7df0); color:white; border:none; border-radius:14px; padding:10px 20px; font-weight:600;">
+   + Pengguna
+</a>
 <table id=userTable class="table table-dashboard">
     <thead>
         <tr>
@@ -34,20 +40,30 @@
             <td>{{ $user->role }}</td>
             <td class="text-nowrap">
                 <button type="button"
-                        class="btn btn-info btn-sm btn-detail"
-                        data-name="{{ $user->name }}"
-                        data-email="{{ $user->email }}"
-                        data-phone="{{ $user->phone }}"
-                        data-role="{{ $user->role }}">
+                    class="btn btn-info btn-sm btn-detail border-0"
+                    style="border-radius:10px;"
+                    data-name="{{ $user->name }}"
+                    data-email="{{ $user->email }}"
+                    data-phone="{{ $user->phone }}"
+                    data-role="{{ $user->role }}">
                     <i class="bi bi-eye"></i>
                 </button>
-                <a href="/dashboard-pengguna/{{ $user->id }}/edit" class="btn btn-sm btn-primary" title="Edit">
+                <a href="/dashboard-pengguna/{{ $user->id }}/edit"
+                    class="btn btn-sm btn-primary border-0"
+                    style="border-radius:10px;"
+                    title="Edit">
                     <i class="bi bi-pencil-square"></i>
                 </a>
-                <button type="button" class="btn btn-danger btn-sm btn-delete" data-id="{{ $user->id }}">
+                <button type="button"
+                    class="btn btn-danger btn-sm btn-delete border-0"
+                    style="border-radius:10px;"
+                    data-id="{{ $user->id }}">
                     <i class="bi bi-trash-fill"></i>
                 </button>
-                <form id="form-delete-{{ $user->id }}" action="/dashboard-pengguna/{{ $user->id }}" method="POST" class="d-none">
+                <form id="form-delete-{{ $user->id }}"
+                    action="/dashboard-pengguna/{{ $user->id }}"
+                    method="POST"
+                    class="d-none">
                     @csrf
                     @method('DELETE')
                 </form>
@@ -57,50 +73,63 @@
     </tbody>
 </table>
 
-<!-- Modal Detail Pengguna -->
 <div class="modal fade" id="detailModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-md modal-dialog-centered">
-    <div class="modal-content shadow-lg">
-      <div class="modal-header bg-primary text-white">
-        <h5 class="modal-title"><i class="bi bi-person-badge"></i> Detail Pengguna</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body p-4">
-        <div class="mb-3">
-          <label class="form-label fw-bold text-muted">Nama Lengkap</label>
-          <div class="p-2 border rounded bg-light" id="detailNama"></div>
+    <div class="modal-dialog modal-md modal-dialog-centered">
+        <div class="modal-content dark-modal">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="bi bi-person-badge-fill me-2"></i>
+                    Detail Pengguna
+                </h5>
+                <button type="button"class="btn-close btn-close-white"data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="detail-box">
+                    <div class="detail-label">
+                        <i class="bi bi-person-fill"></i>
+                        Nama Lengkap
+                    </div>
+                    <div class="detail-value" id="detailNama"></div>
+                </div>
+                <div class="detail-box">
+                    <div class="detail-label">
+                        <i class="bi bi-envelope-fill"></i>
+                        Email
+                    </div>
+                    <div class="detail-value" id="detailEmail"></div>
+                </div>
+                <div class="detail-box">
+                    <div class="detail-label">
+                        <i class="bi bi-telephone-fill"></i>
+                        No HP
+                    </div>
+                    <div class="detail-value" id="detailPhone"></div>
+                </div>
+                <div class="detail-box">
+                    <div class="detail-label">
+                        <i class="bi bi-shield-lock-fill"></i>
+                        Role
+                    </div>
+                    <div class="detail-value" id="detailRole"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-dark-modern" data-bs-dismiss="modal">
+                    <i class="bi bi-x-circle me-1"></i>
+                    Tutup
+                </button>
+            </div>
         </div>
-        <div class="mb-3">
-          <label class="form-label fw-bold text-muted">Email</label>
-          <div class="p-2 border rounded bg-light" id="detailEmail"></div>
-        </div>
-        <div class="mb-3">
-          <label class="form-label fw-bold text-muted">No HP</label>
-          <div class="p-2 border rounded bg-light" id="detailPhone"></div>
-        </div>
-        <div class="mb-3">
-          <label class="form-label fw-bold text-muted">Role</label>
-          <div class="p-2 border rounded bg-light" id="detailRole"></div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary" data-bs-dismiss="modal">
-          <i class="bi bi-x-circle"></i> Tutup
-        </button>
-      </div>
     </div>
-  </div>
 </div>
 
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-
         document.querySelectorAll('.btn-delete').forEach(button => {
             button.addEventListener('click', function () {
                 const userId = this.getAttribute('data-id');
-
                 Swal.fire({
                     title: 'Yakin ingin menghapus?',
                     text: "Data yang dihapus tidak bisa dikembalikan!",
@@ -117,7 +146,6 @@
                 });
             });
         });
-
         document.querySelectorAll('.btn-detail').forEach(button => {
             button.addEventListener('click', function () {
                 document.getElementById('detailNama').innerText = this.dataset.name;
@@ -129,7 +157,6 @@
                 modal.show();
             });
         });
-
         @if (session('pesan'))
             Swal.fire({
                 title: 'Berhasil!',
@@ -164,4 +191,64 @@
     });
 </script>
 @endpush
+<style>
+    .dark-modal {
+        border: none;
+        border-radius: 22px;
+        overflow: hidden;
+        background: #ffffff;
+        color: #1e293b;
+        box-shadow: 0 10px 35px rgba(79,111,230,0.20);
+    }
+    .dark-modal .modal-header {
+        background: linear-gradient(135deg, #4f6fe6, #5d7cf0);
+        border-bottom: none;
+        padding: 18px 24px;
+    }
+    .dark-modal .modal-title {
+        color: white;
+        font-weight: 700;
+    }
+    .detail-box {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        padding: 14px 16px;
+        margin-bottom: 16px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+        transition: 0.3s ease;
+    }
+    .detail-box:hover {
+        transform: translateY(-2px);
+        border-color: #5d7cf0;
+    }
+    .detail-label {
+        font-size: 13px;
+        color: #64748b;
+        margin-bottom: 6px;
+        font-weight: 600;
+    }
+    .detail-value {
+        font-size: 15px;
+        font-weight: 600;
+        color: #1e293b;
+    }
+    .dark-modal .modal-footer {
+        border-top: 1px solid #e2e8f0;
+        background: #f8fafc;
+    }
+    .btn-dark-modern {
+        border: none;
+        border-radius: 12px;
+        padding: 10px 18px;
+        background: linear-gradient(135deg, #4f6fe6, #5d7cf0);
+        color: white;
+        font-weight: 600;
+        transition: 0.3s;
+    }
+    .btn-dark-modern:hover {
+        transform: translateY(-2px);
+        background: linear-gradient(135deg, #5675ea, #6f8cff);
+    }
+</style>
 @endsection

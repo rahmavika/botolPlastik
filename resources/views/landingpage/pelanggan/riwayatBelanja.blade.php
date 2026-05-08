@@ -1,24 +1,20 @@
 @extends('landingpage.layouts.main')
-
 @section('content')
 
 <style>
     body {
         background: #f5f7fa;
     }
-
     .card-clean {
         background: #ffffff;
         border-radius: 10px;
         border: 1px solid #e5e7eb;
     }
-
     .title-clean {
         font-weight: 600;
         color: #111827;
         font-size: 18px;
     }
-
     .table-clean thead th {
         font-size: 13px;
         text-transform: uppercase;
@@ -26,38 +22,31 @@
         color: #6b7280;
         text-align: center;
     }
-
     .table-clean td {
         font-size: 14px;
         color: #374151;
         text-align: center;
         vertical-align: middle;
     }
-
     .table-clean tbody tr:hover {
         background: #f9fafb;
     }
-
     .link-date {
         color: #1d4ed8;
         text-decoration: none;
         font-weight: 500;
     }
-
     .status {
         font-size: 12px;
         padding: 4px 10px;
         border-radius: 6px;
     }
-
     .status-menunggu { background: #fef2f2; color: #991b1b; }
     .status-proses   { background: #eff6ff; color: #1d4ed8; }
     .status-kirim    { background: #eef2ff; color: #3730a3; }
     .status-selesai  { background: #ecfdf5; color: #065f46; }
-
     .status-belum    { background: #fff7ed; color: #9a3412; }
     .status-lunas    { background: #ecfdf5; color: #065f46; }
-
     .btn-clean {
         font-size: 12px;
         padding: 5px 12px;
@@ -65,7 +54,6 @@
         border: 1px solid #d1d5db;
         background: white;
     }
-
     .btn-primary-clean {
         font-size: 12px;
         padding: 5px 12px;
@@ -74,7 +62,6 @@
         color: white;
         border: none;
     }
-
     .modal-custom {
         display: none;
         position: fixed;
@@ -86,7 +73,6 @@
         height: 100%;
         background: rgba(0,0,0,0.7);
     }
-
     .modal-custom img {
         display: block;
         margin: auto;
@@ -94,7 +80,6 @@
         max-height: 80%;
         border-radius: 10px;
     }
-
     .close-btn {
         position: absolute;
         top: 20px;
@@ -105,16 +90,12 @@
     }
 </style>
 
-<section class="py-5">
+<section class="py-5 mt-5">
     <div class="container">
-
         <div class="card card-clean p-4">
-
             <h4 class="text-center mb-4 title-clean">Riwayat Belanja</h4>
-
             <div class="table-responsive">
                 <table class="table table-clean">
-
                     <thead>
                         <tr>
                             <th>Tanggal</th>
@@ -125,28 +106,19 @@
                             <th>Aksi</th>
                         </tr>
                     </thead>
-
                     <tbody>
                         @foreach($riwayatBelanja as $checkout)
                         <tr>
-
-                            {{-- TANGGAL --}}
                             <td>
                                 <a href="{{ route('checkout.detail', $checkout->id) }}" class="link-date">
                                     {{ \Carbon\Carbon::parse($checkout->tanggal_pemesanan)->format('d M Y') }}
                                 </a>
                             </td>
-
-                            {{-- TOTAL --}}
                             <td>
                                 Rp {{ number_format($checkout->total_harga, 0, ',', '.') }}
                             </td>
-
-                            {{-- BUKTI TRANSFER --}}
                             <td id="button-cell-{{ $checkout->id }}">
-
                                 @if($checkout->metode_pembayaran === 'transfer')
-
                                     @if($checkout->bukti_transfer)
                                         <button class="btn-primary-clean"
                                             onclick="showPreview('{{ asset($checkout->bukti_transfer) }}')">
@@ -157,22 +129,17 @@
                                             onclick="document.getElementById('fileInput{{ $checkout->id }}').click()">
                                             Upload
                                         </button>
-
                                         <input type="file"
                                             id="fileInput{{ $checkout->id }}"
                                             style="display:none;"
                                             onchange="uploadBukti({{ $checkout->id }})">
                                     @endif
-
                                 @else
                                     <span style="font-size:12px; color:#6b7280;">
                                         Tidak diperlukan (COD)
                                     </span>
                                 @endif
-
                             </td>
-
-                            {{-- STATUS --}}
                             <td>
                                 @switch($checkout->status)
                                     @case('menunggu_konfirmasi')
@@ -189,8 +156,6 @@
                                     @break
                                 @endswitch
                             </td>
-
-                            {{-- PEMBAYARAN --}}
                             <td>
                                 @switch($checkout->status_pembayaran)
                                     @case('belum_lunas')
@@ -201,115 +166,94 @@
                                     @break
                                 @endswitch
                             </td>
-
-                            {{-- AKSI --}}
                             <td>
                                 @if($checkout->status === 'dikirim')
-
                                     <button class="btn-primary-clean"
                                         onclick="terimaPesanan({{ $checkout->id }})">
                                         Pesanan Diterima
                                     </button>
-
                                 @elseif($checkout->status === 'selesai')
-
                                     <span style="font-size:12px; color:#065f46; font-weight:600;">
                                         Sudah Diterima
                                     </span>
-
                                 @else
-
                                     <span style="font-size:12px; color:#9ca3af;">
                                         -
                                     </span>
-
                                 @endif
                             </td>
-
                         </tr>
                         @endforeach
                     </tbody>
-
                 </table>
             </div>
-
             <div class="mt-4 text-center">
                 {{ $riwayatBelanja->links('pagination::bootstrap-5') }}
             </div>
-
         </div>
     </div>
 </section>
 
-{{-- MODAL --}}
 <div id="previewModal" class="modal-custom">
     <span class="close-btn" onclick="closePreview()">×</span>
     <img id="previewImage">
 </div>
 
 <script>
-function showPreview(url) {
-    document.getElementById('previewImage').src = url;
-    document.getElementById('previewModal').style.display = 'block';
-}
-
-function closePreview() {
-    document.getElementById('previewModal').style.display = 'none';
-}
-
-window.onclick = function(e) {
-    let modal = document.getElementById('previewModal');
-    if (e.target === modal) {
-        modal.style.display = "none";
+    function showPreview(url) {
+        document.getElementById('previewImage').src = url;
+        document.getElementById('previewModal').style.display = 'block';
     }
-}
-
-document.addEventListener('keydown', function(e) {
-    if (e.key === "Escape") closePreview();
-});
-
-/* UPLOAD BUKTI */
-function uploadBukti(id) {
-    let fileInput = document.getElementById('fileInput' + id);
-    let formData = new FormData();
-
-    formData.append('bukti_transfer', fileInput.files[0]);
-    formData.append('_token', '{{ csrf_token() }}');
-
-    fetch('/upload-bukti/' + id, {
-        method: 'POST',
-        body: formData
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.success) {
-            alert('Berhasil upload');
-            location.reload();
+    function closePreview() {
+        document.getElementById('previewModal').style.display = 'none';
+    }
+    window.onclick = function(e) {
+        let modal = document.getElementById('previewModal');
+        if (e.target === modal) {
+            modal.style.display = "none";
         }
+    }
+    document.addEventListener('keydown', function(e) {
+        if (e.key === "Escape") closePreview();
     });
-}
+    function uploadBukti(id) {
+        let fileInput = document.getElementById('fileInput' + id);
+        let formData = new FormData();
 
-/* TERIMA PESANAN */
-function terimaPesanan(id) {
-    if (!confirm('Apakah pesanan sudah diterima?')) return;
+        formData.append('bukti_transfer', fileInput.files[0]);
+        formData.append('_token', '{{ csrf_token() }}');
 
-    fetch('/checkout/terima/' + id, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-        }
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.success) {
-            alert('Pesanan berhasil dikonfirmasi');
-            location.reload();
-        } else {
-            alert('Gagal update status');
-        }
-    });
-}
+        fetch('/upload-bukti/' + id, {
+            method: 'POST',
+            body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                alert('Berhasil upload');
+                location.reload();
+            }
+        });
+    }
+    function terimaPesanan(id) {
+        if (!confirm('Apakah pesanan sudah diterima?')) return;
+        fetch('/checkout/terima/' + id, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                alert('Pesanan berhasil dikonfirmasi');
+                location.reload();
+            } else {
+                alert('Gagal update status');
+            }
+        });
+    }
 </script>
 
 @endsection

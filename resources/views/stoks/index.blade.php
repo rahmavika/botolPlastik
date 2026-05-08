@@ -3,10 +3,17 @@
 @section('navProduk', 'active')
 @section('content')
 
-<div class="d-flex justify-content-between flex-wrap flex--md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">Stok Produk</h1>
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-body d-flex justify-content-between align-items-center">
+        <div>
+            <h3 class="fw-bold mb-1">Stok Produk</h3>
+            <small class="text-muted">Monitoring dan pengelolaan stok barang</small>
+        </div>
+        <div>
+            <i class="bi bi-boxes fs-2 text-success"></i>
+        </div>
+    </div>
 </div>
-
 <table id=stokTable class="table table-dashboard">
     <thead>
         <tr>
@@ -18,75 +25,93 @@
     </thead>
     <tbody>
         @foreach ($stoks as $stok)
-        <tr>
-            <td>{{ $loop->iteration }}</td>
-            <td>{{ $stok->nama_produk }}</td>
-            <td>{{ $stok->jumlah_stok }}</td>
-            <td class="text-nowrap">
-                <button type="button"
-                    class="btn btn-success btn-sm"
-                    data-bs-toggle="modal"
-                    data-bs-target="#modalTambahStok-{{ $stok->produk_id }}">
-                    <i class="bi bi-plus-circle"></i>
-                </button>
-                <button type="button"
-                    class="btn btn-danger btn-sm"
-                    data-bs-toggle="modal"
-                    data-bs-target="#modalKurangiStok-{{ $stok->produk_id }}">
-                    <i class="bi bi-dash-circle"></i>
-                </button>
-            </td>
-        </tr>
-        <div class="modal fade" id="modalTambahStok-{{ $stok->produk_id }}" tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <form action="{{ route('stok.tambah', $stok->produk_id) }}" method="POST">
-                        @csrf
-                        <div class="modal-header">
-                            <h5 class="modal-title">
-                                Tambah Stok - {{ $stok->nama_produk }}
-                            </h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                        </div>
-                        <div class="modal-body">
-                            <label>Jumlah</label>
-                            <input type="number" name="jumlah" class="form-control" min="1" required>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-success">Tambah</button>
-                        </div>
-                    </form>
+            <tr>
+                <td>{{ $loop->iteration }}</td>
+                <td>{{ $stok->nama_produk }}</td>
+                <td>{{ $stok->jumlah_stok }}</td>
+                <td class="text-nowrap">
+                    <button type="button"
+                        class="btn btn-sm text-white border-0"
+                        style="background: linear-gradient(90deg, #3457c8, #4f7df0); border-radius:10px;"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modalTambahStok-{{ $stok->produk_id }}">
+                        <i class="bi bi-plus-circle"></i>
+                    </button>
+                    <button type="button"
+                        class="btn btn-danger btn-sm border-0"
+                        style="border-radius:10px;"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modalKurangiStok-{{ $stok->produk_id }}">
+                        <i class="bi bi-dash-circle"></i>
+                    </button>
+                </td>
+            </tr>
+            <div class="modal fade" id="modalTambahStok-{{ $stok->produk_id }}" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <form action="{{ route('stok.tambah', $stok->produk_id) }}" method="POST">
+                            @csrf
+                            <div class="modal-header">
+                                <h5 class="modal-title fw-semibold">
+                                    Tambah Stok - {{ $stok->nama_produk }}
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label class="form-label">Jumlah</label>
+                                    <input type="number" name="jumlah" class="form-control" min="1" required>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit"
+                                    class="btn w-100 text-white fw-semibold border-0"
+                                    style="background: linear-gradient(90deg, #3457c8, #4f7df0); border-radius:12px;">
+                                    Simpan
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="modal fade" id="modalKurangiStok-{{ $stok->produk_id }}" tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <form action="{{ route('stok.kurangi', $stok->produk_id) }}" method="POST">
-                        @csrf
-                        <div class="modal-header">
-                            <h5 class="modal-title">Kurangi Stok - {{ $stok->nama_produk }}</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                        </div>
-                        <div class="modal-body">
-                            <label>Jumlah</label>
-                            <input type="number" name="jumlah" class="form-control" min="1" required>
-                        </div>
-                        <div class="modal-body">
-                            <label for="keterangan" class="form-label">Keterangan</label>
-                            <input type="text" name="keterangan" class="form-control" placeholder="Contoh: Penjualan, Barang rusak, dll" required>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-danger">Kurangi</button>
-                        </div>
-                    </form>
+            <div class="modal fade" id="modalKurangiStok-{{ $stok->produk_id }}" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <form action="{{ route('stok.kurangi', $stok->produk_id) }}" method="POST">
+                            @csrf
+                            <div class="modal-header">
+                                <h5 class="modal-title fw-semibold">
+                                    Kurangi Stok - {{ $stok->nama_produk }}
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label class="form-label">Jumlah</label>
+                                    <input type="number" name="jumlah" class="form-control" min="1" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Keterangan</label>
+                                    <input type="text"
+                                        name="keterangan"
+                                        class="form-control"
+                                        placeholder="Contoh: Penjualan, Barang rusak, dll"
+                                        required>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit"
+                                    class="btn btn-danger w-100 fw-semibold border-0"
+                                    style="border-radius:12px;">
+                                    Simpan
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
-
         @endforeach
     </tbody>
-
 </table>
 
 @push('scripts')
@@ -112,8 +137,6 @@
                 });
             });
         });
-
-        // Detail
         document.querySelectorAll('.btn-detail').forEach(button => {
             button.addEventListener('click', function () {
                 let nama = this.dataset.nama;

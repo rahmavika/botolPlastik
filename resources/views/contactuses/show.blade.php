@@ -1,14 +1,12 @@
 @extends('layouts.main')
-
 @section('title', 'Detail Pertanyaan')
 @section('navContactUs', 'active')
-
 @section('content')
+
 <div class="card shadow-sm border-0">
     <div class="card-header bg-white">
         <h4 class="text-dark fw-bold mb-0">Detail Pertanyaan Pengguna</h4>
     </div>
-
     <div class="card-body bg-light">
         <div class="row mb-4 gx-5">
             <div class="col-md-6 mb-4">

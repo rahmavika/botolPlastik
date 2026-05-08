@@ -1,11 +1,8 @@
 @extends('layouts.main')
-
 @section('content')
+
 <div class="container-md mt-4">
-
     <div class="card shadow-sm border-0">
-
-        {{-- HEADER (LIGHT CLEAN) --}}
         <div class="card-header bg-white border-bottom py-3">
             <h6 class="mb-0 text-dark fw-semibold">
                 Laporan Mutasi Stok -
@@ -13,18 +10,12 @@
                 {{ $tahun }}
             </h6>
         </div>
-
         <div class="card-body py-3">
-
-            {{-- BUTTON --}}
-            <a href="{{ route('logstoks.index') }}" class="btn btn-outline-secondary btn-sm mb-3">
+            <a href="{{ route('mutasistoks.index') }}" class="btn btn-outline-secondary btn-sm mb-3">
                 ← Kembali
             </a>
-
-            {{-- TABLE --}}
             <div class="table-responsive">
                 <table class="table table-bordered table-sm align-middle text-center mb-0">
-
                     <thead class="table-light">
                         <tr>
                             <th style="width: 60px;">No</th>
@@ -35,7 +26,6 @@
                             <th style="width: 120px;">Stok Akhir</th>
                         </tr>
                     </thead>
-
                     <tbody>
                         @forelse ($dataMutasi as $index => $item)
                             <tr>
@@ -54,12 +44,9 @@
                             </tr>
                         @endforelse
                     </tbody>
-
                 </table>
             </div>
-
         </div>
     </div>
-
 </div>
 @endsection

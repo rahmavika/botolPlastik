@@ -1,11 +1,19 @@
 @extends('layouts.main')
-
 @section('title', 'Data Pertanyaan')
 @section('navContactUs', 'active')
-
 @section('content')
-<div class="d-flex justify-content-between flex-wrap flex--md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">Pertanyaan Masuk</h1>
+
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-body d-flex justify-content-between align-items-center">
+        <div>
+            <h3 class="fw-bold mb-1">Contact Us</h3>
+            <small class="text-muted">Kelola pesan dan pertanyaan dari pelanggan</small>
+        </div>
+
+        <div>
+            <i class="bi bi-chat-dots-fill fs-2 text-primary"></i>
+        </div>
+    </div>
 </div>
 <table id="pertanyaanTable" class="table table-dashboard">
     <thead>
@@ -27,13 +35,23 @@
             <td>{{ Str::limit($question->pertanyaan, 50) }}</td>
             <td>{{ $question->jawaban ? Str::limit($question->jawaban, 50) : '-' }}</td>
             <td class="text-nowrap">
-                <a href="{{ route('contactuses.edit', $question->id) }}" class="btn btn-sm btn-primary">
+                <a href="{{ route('contactuses.edit', $question->id) }}"
+                    class="btn btn-sm btn-primary border-0"
+                    style="border-radius:10px;">
                     <i class="bi bi-pencil-square"></i>
                 </a>
-                <button type="button" class="btn btn-danger btn-sm btn-delete" data-id="{{ $question->id }}">
+
+                <button type="button"
+                    class="btn btn-danger btn-sm btn-delete border-0"
+                    style="border-radius:10px;"
+                    data-id="{{ $question->id }}">
                     <i class="bi bi-trash-fill"></i>
                 </button>
-                <form id="form-delete-{{ $question->id }}" action="{{ route('contactuses.destroy', $question->id) }}" method="POST" class="d-none">
+
+                <form id="form-delete-{{ $question->id }}"
+                    action="{{ route('contactuses.destroy', $question->id) }}"
+                    method="POST"
+                    class="d-none">
                     @csrf
                     @method('DELETE')
                 </form>

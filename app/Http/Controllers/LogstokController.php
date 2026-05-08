@@ -16,15 +16,12 @@ class LogStokController extends Controller
         $query = LogStok::with(['produk', 'user'])
             ->orderBy('created_at', 'desc');
 
-        // 🔎 FILTER TANGGAL (opsional)
         if ($request->from && $request->to) {
             $query->whereBetween('tanggal', [
                 $request->from,
                 $request->to
             ]);
         }
-
-        // 🔎 FILTER BULAN (opsional)
         if ($request->bulan) {
             $bulan = Carbon::parse($request->bulan);
             $query->whereMonth('tanggal', $bulan->month)
