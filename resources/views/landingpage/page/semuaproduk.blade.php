@@ -1,232 +1,58 @@
 @extends('landingpage.layouts.main')
 @section('content')
 
-<div class="section-header-advanced mt-5 mb-4">
-    <div class="left">
-        <h4>Semua Produk</h4>
-        <span>Koleksi terbaik untuk kebutuhan Anda</span>
-    </div>
-    <div class="right-group">
-        <form action="{{ url('/semuaproduk') }}" method="GET" class="search-modern">
-            <i class="bi bi-search search-icon"></i>
-
-            <input type="text"
-                name="search"
-                class="search-modern-input"
-                placeholder="Cari produk..."
-                value="{{ request('search') }}">
-            <button type="submit" class="search-modern-btn">
-                Cari
-            </button>
-        </form>
-    </div>
-</div>
-
-<div class="tab-content">
-    <div class="tab-pane fade show active">
-        <div class="row row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-4">
-        @forelse($produks as $produk)
-        <div class="col">
-            <div class="product-card-modern">
-                @if(!isset($produk->stok) || $produk->stok->jumlah_stok == 0)
-                    <span class="badge-habis">Habis</span>
-                @endif
-                <div class="product-img-modern">
-                    <img src="{{ asset('storage/' . $produk->gambar) }}">
-                </div>
-                <div class="product-body-modern">
-                    <h6 class="product-title-modern">
-                        {{ $produk->nama_produk }}
-                    </h6>
-                    <small class="text-muted">
-                        {{ $produk->satuan->satuan ?? '-' }}
-                    </small>
-                    <p class="product-desc-modern">
-                        {{ $produk->keterangan }}
-                    </p>
-                    <small class="text-muted d-block">
-                        Stok: <span class="fw-semibold text-dark">
-                            {{ $produk->stok->jumlah_stok ?? 0 }}
-                        </span>
-                    </small>
-                    <div class="price-modern">
-                        Rp {{ number_format($produk->harga, 0, ',', '.') }}
-                    </div>
-                    <div class="bottom-section">
-                        <div class="qty-box-modern">
-                            <button type="button" class="minus"
-                                @if(!Auth::check()) data-bs-toggle="modal" data-bs-target="#loginModalInfo" @endif>-</button>
-                            <span class="qty-display" data-id="{{ $produk->id }}">1</span>
-                            <button type="button" class="plus"
-                                data-max="{{ $produk->stok->jumlah_stok ?? 0 }}"
-                                @if(!Auth::check()) data-bs-toggle="modal" data-bs-target="#loginModalInfo" @endif>+</button>
-                        </div>
-                        <form action="{{ route('keranjangs.store') }}" method="POST" id="form-{{ $produk->id }}">
-                            @csrf
-                            <input type="hidden" name="produk_id" value="{{ $produk->id }}">
-                            <input type="hidden" name="jumlah" value="1" class="qty-input" data-id="{{ $produk->id }}">
-                            <button type="submit"
-                                onclick="return addToCart(event, {{ $produk->id }})"
-                                class="btn-cart-modern"
-                                @if(!Auth::check() || (isset($produk->stok) && $produk->stok->jumlah_stok == 0))
-                                    data-bs-toggle="modal" data-bs-target="#loginModalInfo"
-                                @endif>
-                                <i class="bi bi-cart-plus"></i>
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-        @empty
-            <p class="text-center text-danger">Produk tidak tersedia</p>
-        @endforelse
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="loginModalInfo" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content modal-info">
-            <div class="modal-body text-center p-4">
-                <div class="icon-box mb-3">
-                    <i class="bi bi-exclamation-circle"></i>
-                </div>
-                <h5 class="fw-semibold mb-2">Akses Dibatasi</h5>
-                <p class="text-muted small mb-4">
-                    Silakan login terlebih dahulu untuk melanjutkan
-                </p>
-                <div class="d-flex justify-content-center">
-                    <button class="btn-login"
-                        data-bs-toggle="modal"
-                        data-bs-target="#loginModal"
-                        data-bs-dismiss="modal">
-                        Login Sekarang
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="confirmModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content modal-success">
-            <div class="modal-body text-center p-4">
-                <div class="success-icon mb-3">
-                    <i class="bi bi-check-circle-fill"></i>
-                </div>
-                <h5 class="fw-bold mb-2">Berhasil!</h5>
-                <p class="text-muted small mb-4">
-                    Produk berhasil ditambahkan ke keranjang
-                </p>
-                <div class="d-flex gap-2">
-                    <button class="btn btn-outline-dark w-50"
-                            data-bs-dismiss="modal">
-                        Lanjut Belanja
-                    </button>
-                    <a href="/keranjang" class="btn btn-dark w-50">
-                        Lihat Keranjang
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-    function addToCart(e, id) {
-        @if(!Auth::check())
-            e.preventDefault();
-            return false;
-        @endif
-        e.preventDefault();
-        let form = document.getElementById('form-' + id);
-        fetch(form.action, {
-            method: 'POST',
-            body: new FormData(form),
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
-            }
-        })
-        .then(res => {
-            if (res.ok) {
-                new bootstrap.Modal(document.getElementById('confirmModal')).show();
-            }
-        });
-    }
-    document.querySelectorAll('.minus').forEach(btn => {
-        btn.addEventListener('click', function () {
-            let parent = btn.closest('.product-card-modern');
-            let display = parent.querySelector('.qty-display');
-            let id = display.dataset.id;
-            let input = parent.querySelector(`.qty-input[data-id="${id}"]`);
-            let val = parseInt(display.innerText);
-            if (val > 1) {
-                val--;
-                display.innerText = val;
-                input.value = val;
-            }
-        });
-    });
-    document.querySelectorAll('.plus').forEach(btn => {
-        btn.addEventListener('click', function () {
-            let parent = btn.closest('.product-card-modern');
-            let display = parent.querySelector('.qty-display');
-            let id = display.dataset.id;
-            let input = parent.querySelector(`.qty-input[data-id="${id}"]`);
-            let val = parseInt(display.innerText);
-            let max = parseInt(btn.getAttribute('data-max'));
-            if (val < max) {
-                val++;
-                display.innerText = val;
-                input.value = val;
-            }
-        });
-    });
-</script>
-
 <style>
-    body {
-        background: #f5f7fa;
+    .page-wrapper{
+        position: relative;
+        padding: 40px 0 60px;
+        overflow: hidden;
+        z-index: 1;
+    }
+    .page-wrapper::before{
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image: url('/storage/image.png');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        z-index: -2;
+    }
+    .page-wrapper::after{
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: rgba(255,255,255,0.70);
+        z-index: -1;
+    }
+    footer{
+        position: relative;
+        z-index: 5;
     }
     .section-header-advanced {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        border-bottom: 1px solid #e5e7eb;
+        border-bottom: 1px solid rgba(255,255,255,0.4);
         padding-bottom: 10px;
+        margin-bottom: 25px;
     }
     .section-header-advanced .left h4 {
         margin: 0;
-        font-weight: 600;
+        font-weight: 700;
         color: #111827;
-        font-size: 18px;
+        font-size: 22px;
     }
     .section-header-advanced .left span {
-        font-size: 12px;
-        color: #6b7280;
+        font-size: 13px;
+        color: #4b5563;
     }
     .search-modern {
         display: flex;
         align-items: center;
-        background: #f5f5f5;
-        border-radius: 50px;
-        padding: 5px;
-        width: 100%;
-        max-width: 420px;
-        border: 1px solid #e5e7eb;
-        transition: 0.3s;
-    }
-    .search-modern:focus-within {
-        background: #fff;
-        border-color: #072258;
-        box-shadow: 0 0 0 4px rgba(7, 34, 88, 0.08);
-    }
-    .search-modern {
-        display: flex;
-        align-items: center;
-        background: #f5f5f5;
+        background: rgba(255,255,255,0.8);
+        backdrop-filter: blur(8px);
         border-radius: 40px;
         padding: 2px 4px;
         width: 100%;
@@ -270,28 +96,22 @@
     .search-modern-btn:hover {
         background: #0a2f78;
     }
-    @media (max-width: 576px) {
-        .search-modern {
-            max-width: 220px;
-        }
-        .search-modern-btn {
-            padding: 5px 10px;
-            font-size: 10px;
-        }
-        .search-modern-input {
-            font-size: 11px;
-        }
-    }
     .product-card-modern {
-        background: #fff;
-        border-radius: 10px; /* 🔥 lebih formal */
-        border: 1px solid #e5e7eb;
+        background: rgba(255,255,255,0.92);
+        backdrop-filter: blur(6px);
+        border-radius: 12px;
+        border: 1px solid rgba(255,255,255,0.4);
         overflow: hidden;
-        transition: 0.2s;
+        transition: 0.25s ease;
         display: flex;
         flex-direction: column;
         height: 100%;
         position: relative;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+    }
+    .product-card-modern:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 28px rgba(0,0,0,0.10);
     }
     .badge-habis {
         position: absolute;
@@ -304,41 +124,37 @@
         padding: 4px 8px;
         border-radius: 6px;
     }
-    .product-card-modern:hover {
-        transform: translateY(-3px);
-    }
     .product-img-modern {
-        height: 160px;
+        height: 170px;
         background: #f9fafb;
     }
     .product-img-modern img {
         width: 100%;
         height: 100%;
         object-fit: cover;
-        border-radius: 0; /* 🔥 hilangkan lengkung */
     }
     .product-body-modern {
-        padding: 12px;
+        padding: 14px;
         display: flex;
         flex-direction: column;
         gap: 5px;
     }
     .product-title-modern {
         font-size: 14px;
-        font-weight: 600;
-        min-height: 34px;
+        font-weight: 700;
+        min-height: 36px;
         color: #111827;
     }
     .product-desc-modern {
         font-size: 12px;
         color: #6b7280;
-        height: 28px;
+        height: 32px;
         overflow: hidden;
     }
     .price-modern {
-        font-weight: 600;
+        font-weight: 700;
         color: #072258;
-        font-size: 14px;
+        font-size: 15px;
     }
     .bottom-section {
         display: flex;
@@ -351,13 +167,13 @@
         align-items: center;
         gap: 6px;
         background: #f3f4f6;
-        padding: 3px 6px;
-        border-radius: 6px; /* 🔥 lebih kecil */
+        padding: 4px 7px;
+        border-radius: 8px;
     }
     .qty-box-modern button {
         border: none;
         background: transparent;
-        font-weight: 600;
+        font-weight: 700;
         cursor: pointer;
         font-size: 13px;
     }
@@ -365,29 +181,20 @@
         background: #072258;
         border: none;
         color: white;
-        width: 34px;
-        height: 34px;
-        border-radius: 6px; /* 🔥 dari bulat jadi kotak soft */
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
         display: flex;
         justify-content: center;
         align-items: center;
+        transition: .3s;
     }
     .btn-cart-modern:hover {
         background: #051a45;
     }
-    .badge-habis {
-        position: absolute;
-        top: 8px;
-        left: 8px;
-        background: #dc2626;
-        color: #fff;
-        font-size: 11px;
-        padding: 3px 6px;
-        border-radius: 4px; /* 🔥 kecil */
-    }
     .modal-info,
     .modal-success {
-        border-radius: 10px;
+        border-radius: 12px;
         border: none;
     }
     .icon-box i {
@@ -403,7 +210,7 @@
         color: white;
         border: none;
         padding: 8px 16px;
-        border-radius: 6px;
+        border-radius: 8px;
     }
     .btn-login:hover {
         background: #051a45;
@@ -415,5 +222,101 @@
     .product-card-modern:has(.badge-habis) .badge-habis {
         pointer-events: auto;
     }
+    @media (max-width: 576px) {
+        .search-modern {
+            max-width: 220px;
+        }
+        .search-modern-btn {
+            padding: 5px 10px;
+            font-size: 10px;
+        }
+        .search-modern-input {
+            font-size: 11px;
+        }
+    }
 </style>
+
+<div class="page-wrapper">
+    <div class="container">
+        <div class="section-header-advanced mt-5 mb-4">
+            <div class="left">
+                <h4>Semua Produk</h4>
+                <span>Koleksi terbaik untuk kebutuhan Anda</span>
+            </div>
+            <div class="right-group">
+                <form action="{{ url('/semuaproduk') }}" method="GET" class="search-modern">
+                    <i class="bi bi-search search-icon"></i>
+                    <input type="text" name="search" class="search-modern-input" placeholder="Cari produk..." value="{{ request('search') }}">
+                    <button type="submit" class="search-modern-btn">
+                        Cari
+                    </button>
+                </form>
+            </div>
+        </div>
+        <div class="tab-content">
+            <div class="tab-pane fade show active">
+                <div class="row row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-4">
+                    @forelse($produks as $produk)
+                    <div class="col">
+                        <div class="product-card-modern">
+                            @if(!isset($produk->stok) || $produk->stok->jumlah_stok == 0)
+                                <span class="badge-habis">Habis</span>
+                            @endif
+                            <div class="product-img-modern">
+                                <img src="{{ asset('storage/' . $produk->gambar) }}">
+                            </div>
+                            <div class="product-body-modern">
+                                <h6 class="product-title-modern">
+                                    {{ $produk->nama_produk }}
+                                </h6>
+                                <small class="text-muted">
+                                    {{ $produk->satuan->satuan ?? '-' }}
+                                </small>
+                                <p class="product-desc-modern">
+                                    {{ $produk->keterangan }}
+                                </p>
+                                <small class="text-muted d-block">
+                                    Stok:
+                                    <span class="fw-semibold text-dark">
+                                        {{ $produk->stok->jumlah_stok ?? 0 }}
+                                    </span>
+                                </small>
+                                <div class="price-modern">
+                                    Rp {{ number_format($produk->harga, 0, ',', '.') }}
+                                </div>
+                                <div class="bottom-section">
+                                    <div class="qty-box-modern">
+                                        <button type="button" class="minus">-</button>
+                                        <span class="qty-display" data-id="{{ $produk->id }}">
+                                            1
+                                        </span>
+                                        <button type="button" class="plus" data-max="{{ $produk->stok->jumlah_stok ?? 0 }}">
+                                            +
+                                        </button>
+                                    </div>
+                                    <form action="{{ route('keranjangs.store') }}"
+                                          method="POST"
+                                          id="form-{{ $produk->id }}">
+                                        @csrf
+                                        <input type="hidden" name="produk_id" value="{{ $produk->id }}">
+                                        <input type="hidden" name="jumlah" value="1" class="qty-input" data-id="{{ $produk->id }}">
+                                        <button type="submit" onclick="return addToCart(event, {{ $produk->id }})" class="btn-cart-modern">
+                                            <i class="bi bi-cart-plus"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @empty
+                    <p class="text-center text-danger">
+                        Produk tidak tersedia
+                    </p>
+                    @endforelse
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection

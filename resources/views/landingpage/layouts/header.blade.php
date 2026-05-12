@@ -321,6 +321,14 @@
         font-size: 13px;
         transition: 0.2s;
     }
+    .btn-primary {
+        background: linear-gradient(135deg, #4f6edb, #5b7cff) !important;
+        border: none !important;
+    }
+
+    .btn-primary:hover {
+        background: linear-gradient(135deg, #4563cf, #5374f5) !important;
+    }
     .btn-login:hover {
         background: linear-gradient(135deg, #243b6b, #1a284a);
     }
@@ -386,9 +394,12 @@
         padding: 0 12px;
     }
     .primary-btn {
-        background: #0d6efd;
+        background: linear-gradient(135deg, #4f6edb, #5b7cff);
         border: none;
         color: white;
+    }
+    .primary-btn:hover {
+        background: linear-gradient(135deg, #4563cf, #5374f5);
     }
     .danger-btn {
         background: white;
@@ -415,8 +426,11 @@
         transition: 0.3s;
     }
     .menu-list a:hover {
-        background: #dbeafe;
-        color: #2563eb;
+        background: linear-gradient(135deg, #4f6edb, #5b7cff);
+        color: #131416;
+    }
+    .menu-list a:hover i {
+        color: white;
     }
     .hero-section {
         min-height: 460px;
