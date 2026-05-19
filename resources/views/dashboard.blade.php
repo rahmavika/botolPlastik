@@ -168,7 +168,7 @@
             data: {
                 labels: {!! json_encode($pesananPerHari->pluck('tanggal')) !!},
                 datasets: [{
-                    label: 'Penjualan Lunas',
+                    label: 'Penjualan Selesai',
                     data: {!! json_encode($pesananPerHari->pluck('total')) !!},
                     borderColor: '#3b82f6',
                     backgroundColor: 'rgba(59,130,246,0.2)',
@@ -228,8 +228,6 @@
     document.addEventListener('DOMContentLoaded', function () {
 
         const ctx = document.getElementById('grafikBulanan').getContext('2d');
-
-        // ✅ Gradient
         const gradient = ctx.createLinearGradient(0, 0, 0, 300);
         gradient.addColorStop(0, '#6366f1');
         gradient.addColorStop(1, '#a5b4fc');

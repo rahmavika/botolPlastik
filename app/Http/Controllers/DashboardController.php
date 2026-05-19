@@ -17,63 +17,84 @@ class DashboardController extends Controller
         $start = Carbon::parse($bulan)->startOfMonth();
         $end   = Carbon::parse($bulan)->endOfMonth();
 
+        // CARD
         $jumlahProduk = Produk::count();
-        $jumlahPelanggan = User::where('role', 'pelanggan')->count();
-        $jumlahPesananMasuk = Checkout::where('status', 'menunggu_konfirmasi')->count();
 
-        $totalPenjualan = Checkout::where('status_pembayaran', 'lunas')
+        $jumlahPelanggan = User::where('role', 'pelanggan')
+            ->count();
+
+        $jumlahPesananMasuk = Checkout::where('status', 'menunggu_konfirmasi')
+            ->count();
+
+        // TOTAL PENJUALAN (STATUS SELESAI)
+        $totalPenjualan = Checkout::where('status', 'selesai')
             ->whereBetween('updated_at', [$start, $end])
             ->sum('total_harga');
 
+        // GRAFIK PENJUALAN HARIAN
         $data = Checkout::selectRaw('DATE(updated_at) as tanggal, SUM(total_harga) as total')
-            ->where('status_pembayaran', 'lunas')
+            ->where('status', 'selesai')
             ->whereBetween('updated_at', [$start, $end])
             ->groupBy('tanggal')
             ->pluck('total', 'tanggal');
 
         $pesananPerHari = collect();
+
         for ($i = 0; $i < $start->daysInMonth; $i++) {
-            $tgl = $start->copy()->addDays($i)->format('Y-m-d');
+
+            $tgl = $start->copy()
+                ->addDays($i)
+                ->format('Y-m-d');
 
             $pesananPerHari->push([
                 'tanggal' => Carbon::parse($tgl)->translatedFormat('d'),
-                'total' => $data[$tgl] ?? 0
+                'total'   => $data[$tgl] ?? 0
             ]);
         }
 
+        // GRAFIK PENJUALAN BULANAN
         $tahun = $request->tahun ?? now()->year;
+
         $dataDB = Checkout::selectRaw('MONTH(updated_at) as bulan, SUM(total_harga) as total')
-            ->where('status_pembayaran', 'lunas')
+            ->where('status', 'selesai')
             ->whereYear('updated_at', $tahun)
             ->groupBy('bulan')
             ->orderBy('bulan')
             ->pluck('total', 'bulan');
+
         $penjualanPerBulan = collect();
+
         for ($i = 1; $i <= 12; $i++) {
+
             $penjualanPerBulan->push([
-                'bulan' => $i,
+                'bulan'      => $i,
                 'nama_bulan' => Carbon::create()->month($i)->translatedFormat('F'),
-                'total' => $dataDB[$i] ?? 0
+                'total'      => $dataDB[$i] ?? 0
             ]);
         }
 
+        // STATUS PESANAN
         $statusDefault = collect([
             'menunggu_konfirmasi' => 0,
             'diproses'            => 0,
             'dikirim'             => 0,
             'selesai'             => 0,
         ]);
+
         $statusDB = Checkout::selectRaw('status, COUNT(*) as total')
             ->groupBy('status')
             ->pluck('total', 'status');
+
         $statusPesanan = $statusDefault->merge($statusDB);
 
-        $metodePembayaran = Checkout::where('status_pembayaran', 'lunas')
+        // METODE PEMBAYARAN
+        $metodePembayaran = Checkout::where('status', 'selesai')
             ->selectRaw('metode_pembayaran, COUNT(*) as total')
             ->groupBy('metode_pembayaran')
             ->pluck('total', 'metode_pembayaran');
 
-        $transaksiTerbaru = Checkout::where('status_pembayaran', 'lunas')
+        // TRANSAKSI TERBARU
+        $transaksiTerbaru = Checkout::where('status', 'selesai')
             ->latest()
             ->limit(5)
             ->get();

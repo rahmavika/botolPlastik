@@ -6,7 +6,6 @@ use App\Models\Checkout;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\PDF;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Log;
 
 class PenjualanController extends Controller
 {
@@ -14,21 +13,30 @@ class PenjualanController extends Controller
     {
         $tahun = $request->input('tahun');
         $bulan = $request->input('bulan');
-        $query = Checkout::where('status', 'selesai')
-            ->select('id', 'user_id', 'alamat_pengiriman', 'total_harga', 'tanggal_pemesanan', 'status');
+
+        $query = Checkout::where('status', 'selesai');
         if ($tahun) {
-            $query->whereYear('tanggal_pemesanan', $tahun);
+            $query->whereYear('updated_at', $tahun);
         }
         if ($bulan) {
-            $query->whereMonth('tanggal_pemesanan', $bulan);
+            $query->whereMonth('updated_at', $bulan);
         }
-        $checkouts = $query->latest()->paginate(10);
-        return view('penjualans.daftarPenjualan', compact('checkouts', 'tahun', 'bulan'));
+
+        $checkouts = $query
+            ->latest('updated_at')
+            ->paginate(10);
+
+        return view('penjualans.daftarPenjualan', compact(
+            'checkouts',
+            'tahun',
+            'bulan'
+        ));
     }
 
     public function show($id)
     {
         $checkout = Checkout::findOrFail($id);
+
         return view('penjualans.detailPenjualan', compact('checkout'));
     }
 
@@ -37,24 +45,35 @@ class PenjualanController extends Controller
         $tahun = $request->input('tahun');
         $bulan = $request->input('bulan');
 
-        $checkouts = Checkout::when($tahun, function ($query, $tahun) {
-                                return $query->whereYear('tanggal_pemesanan', $tahun);
-                            })
-                            ->when($bulan, function ($query, $bulan) {
-                                return $query->whereMonth('tanggal_pemesanan', $bulan);
-                            })
-                            ->where('status', 'selesai')
-                            ->get();
+        $checkouts = Checkout::where('status', 'selesai')
 
-        $message = $checkouts->isEmpty() ? 'Maaf, penjualan tidak tersedia.' : null;
-        $namaBulan = $bulan ? Carbon::create(null, $bulan)->translatedFormat('F') : 'Semua Bulan';
+            ->when($tahun, function ($query) use ($tahun) {
+                $query->whereYear('updated_at', $tahun);
+            })
+
+            ->when($bulan, function ($query) use ($bulan) {
+                $query->whereMonth('updated_at', $bulan);
+            })
+
+            ->latest('updated_at')
+            ->get();
+
+        $message = $checkouts->isEmpty()
+            ? 'Maaf, data penjualan tidak tersedia.'
+            : null;
+
+        $namaBulan = $bulan
+            ? Carbon::create()->month((int)$bulan)->translatedFormat('F')
+            : 'Semua Bulan';
+
         $totalPenjualan = $checkouts->sum('total_harga');
+
         $pdf = PDF::loadView('penjualans.cetakPdf', [
-            'checkouts' => $checkouts,
-            'tahun' => $tahun ?: 'Semua Tahun',
-            'bulan' => $namaBulan,
-            'message' => $message,
-            'totalPenjualan' => $totalPenjualan,
+            'checkouts'       => $checkouts,
+            'tahun'           => $tahun ?: 'Semua Tahun',
+            'bulan'           => $namaBulan,
+            'message'         => $message,
+            'totalPenjualan'  => $totalPenjualan,
         ]);
 
         return $pdf->stream('Laporan-Penjualan.pdf');

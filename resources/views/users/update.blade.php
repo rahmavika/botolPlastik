@@ -37,19 +37,26 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Role</label>
-                            @if(auth()->user()->role === 'admin')
-                                <input type="text" class="form-control" value="Pelanggan" readonly>
-                                <input type="hidden" name="role" value="pelanggan">
-                            @else
-                                <select class="form-select @error('role') is-invalid @enderror" name="role">
-                                    <option value="">-- Pilih Role --</option>
-                                    <option value="admin" {{ old('role', $user->role) == 'admin' ? 'selected' : '' }}>Admin</option>
-                                    <option value="pelanggan" {{ old('role', $user->role) == 'pelanggan' ? 'selected' : '' }}>Pelanggan</option>
-                                </select>
-                                @error('role')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            @endif
+
+                            <select class="form-select @error('role') is-invalid @enderror" name="role">
+                                <option value="">-- Pilih Role --</option>
+
+                                <option value="admin"
+                                    {{ old('role', $user->role) == 'admin' ? 'selected' : '' }}>
+                                    Admin
+                                </option>
+
+                                <option value="pelanggan"
+                                    {{ old('role', $user->role) == 'pelanggan' ? 'selected' : '' }}>
+                                    Pelanggan
+                                </option>
+                            </select>
+
+                            @error('role')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
                         <hr>
                         <div class="mb-3">

@@ -15,9 +15,9 @@
     <div class="card-body p-3">
         <div class="mb-3">
             <table class="table table-sm align-middle mb-0">
-                <tbody
+                <tbody>
                     <tr>
-                        <th width="30%" style="color:#6b7280;">Tanggal</th>
+                        <th width="30%" style="color:#6b7280;">Tanggal Pemesanan</th>
                         <td>
                             {{ \Carbon\Carbon::parse($checkout->tanggal_pemesanan)->format('d-m-Y') }}
                         </td>
@@ -35,26 +35,25 @@
                     <tr>
                         <th style="color:#6b7280;">Metode Pembayaran</th>
                         <td>
-                            <span style="
-                                background:#eef2ff;
-                                color:#3730a3;
-                                padding:3px 8px;
-                                border-radius:4px;
-                                font-size:12px;">
+                            <span style="background:#eef2ff; color:#3730a3; padding:3px 8px; border-radius:4px; font-size:12px;">
                                 {{ ucfirst($checkout->metode_pembayaran) }}
                             </span>
                         </td>
                     </tr>
-                    @if(strtolower($checkout->metode_pembayaran) === 'transfer')
-                        <tr>
-                            <th style="color:#6b7280;">Bank</th>
-                            <td>Mandiri</td>
-                        </tr>
-                        <tr>
-                            <th style="color:#6b7280;">No Rekening</th>
-                            <td class="fw-semibold">1120290091890</td>
-                        </tr>
-                    @endif
+                    <tr>
+                        <th style="color:#6b7280;">Metode Pengiriman</th>
+                        <td>
+                            @if($checkout->metode_pengiriman == 'delivery')
+                                <span style="background:#dbeafe; color:#1d4ed8; padding:3px 8px; border-radius:4px; font-size:12px;">
+                                    Delivery Toko
+                                </span>
+                            @else
+                                <span style="background:#f3f4f6; color:#374151; padding:3px 8px; border-radius:4px; font-size:12px;">
+                                    Ambil di Toko
+                                </span>
+                            @endif
+                        </td>
+                    </tr>
                     <tr>
                         <th style="color:#6b7280;">Total</th>
                         <td class="fw-semibold" style="color:#16a34a;">
@@ -107,25 +106,13 @@
                         @endforeach
                     </tbody>
                     <tfoot>
-                        <tr>
-                            <td colspan="3"></td>
-                            <td class="text-end" style="color:#6b7280;">Subtotal</td>
-                            <td class="text-end">
-                                Rp {{ number_format($subtotal, 0, ',', '.') }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="3"></td>
-                            <td class="text-end" style="color:#2563eb;">Ongkir</td>
-                            <td class="text-end" style="color:#2563eb;">
-                                Rp {{ number_format($checkout->ongkir ?? 0, 0, ',', '.') }}
-                            </td>
-                        </tr>
                         <tr style="background:#f3f4f6;">
                             <td colspan="3"></td>
-                            <td class="text-end fw-semibold">Total</td>
+                            <td class="text-end fw-semibold">
+                                Total
+                            </td>
                             <td class="text-end fw-bold" style="color:#16a34a;">
-                                Rp {{ number_format($subtotal + ($checkout->ongkir ?? 0), 0, ',', '.') }}
+                                Rp {{ number_format($subtotal, 0, ',', '.') }}
                             </td>
                         </tr>
                     </tfoot>

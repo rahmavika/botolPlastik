@@ -16,9 +16,30 @@ class UserController extends Controller
         $currentUser = auth()->user();
 
         if ($currentUser->role === 'admin') {
-            $users = User::where('role', 'pelanggan')->get();
+
+            $users = User::where(function ($query) use ($currentUser) {
+                    $query->where('role', 'pelanggan')
+                        ->orWhere('id', $currentUser->id); // user login ikut tampil
+                })
+                ->orderByRaw("
+                    CASE
+                        WHEN id = ? THEN 0
+                        ELSE 1
+                    END
+                ", [$currentUser->id])
+                ->get();
+
         } elseif ($currentUser->role === 'super_admin') {
-            $users = User::whereIn('role', ['admin', 'pelanggan'])->get();
+
+            $users = User::whereIn('role', ['admin', 'pelanggan'])
+                ->orderByRaw("
+                    CASE
+                        WHEN id = ? THEN 0
+                        ELSE 1
+                    END
+                ", [$currentUser->id])
+                ->get();
+
         } else {
             $users = collect();
         }
@@ -42,9 +63,9 @@ class UserController extends Controller
             'role' => 'nullable|in:admin,pelanggan',
         ]);
 
-        if ($currentUser->role === 'admin') {
-            $validated['role'] = 'pelanggan';
-        }
+        // if ($currentUser->role === 'admin') {
+        //     $validated['role'] = 'pelanggan';
+        // }
         $validated['password'] = \Illuminate\Support\Facades\Hash::make($validated['password']);
 
         User::create($validated);
@@ -75,9 +96,9 @@ class UserController extends Controller
             'password' => 'nullable|min:4|confirmed',
         ]);
 
-        if ($currentUser->role === 'admin') {
-            $validated['role'] = 'pelanggan';
-        }
+        // if ($currentUser->role === 'admin') {
+        //     $validated['role'] = 'pelanggan';
+        // }
 
         if (!empty($validated['password'])) {
             if (!Hash::check($validated['old_password'], $user->password)) {

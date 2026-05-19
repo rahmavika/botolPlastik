@@ -54,12 +54,9 @@
         td.text-left {
             text-align: left;
         }
-        .footer {
-            margin-top: 30px;
-        }
-        .signature {
-            margin-top: 60px;
-            text-align: right;
+        .footer,
+        .signature{
+            text-align: center;
         }
     </style>
 </head>
@@ -104,10 +101,11 @@
             @endforelse
         </tbody>
     </table>
-    <div class="footer">
+    <div class="footer text-center">
         <p>Riau, {{ $tanggalCetak }}</p>
     </div>
-    <div class="signature">
+
+    <div class="signature text-center">
         <p>Mengetahui,</p>
         <p><strong>Pemilik Toko</strong></p>
         <br><br><br>

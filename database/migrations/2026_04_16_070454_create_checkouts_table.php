@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('service')->nullable(); // REG, YES
             $table->integer('ongkir')->default(0);
             $table->decimal('total_harga', 12, 2);
-            
+
             $table->json('produk_details');
             $table->timestamp('tanggal_pemesanan')->useCurrent();
             $table->enum('metode_pembayaran', ['transfer', 'cod']);

@@ -28,7 +28,7 @@
                 <p class="footer-info">
                     <i class="bi bi-geo-alt-fill"></i> Jl. Paus, Tangkerang Tengah, Kec. Marpoyan Damai, Kota Pekanbaru, Riau 28282 <br>
                     <i class="bi bi-telephone-fill"></i> 081371209486 <br>
-                    <i class="bi bi-clock-fill"></i> Buka Setiap Hari
+                    <i class="bi bi-clock-fill"></i> Buka Setiap Hari (10.00 - 22.00)
                 </p>
             </div>
         </div>

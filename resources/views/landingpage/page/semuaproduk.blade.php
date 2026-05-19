@@ -234,6 +234,71 @@
             font-size: 11px;
         }
     }
+    .cart-popup{
+        border-radius: 8px !important;
+        padding: 20px 20px 22px !important;
+    }
+
+    .cart-title{
+        font-size: 16px !important;
+        font-weight: 700 !important;
+        color: #4b5563 !important;
+        margin-top: 6px !important;
+        margin-bottom: 5px !important;
+    }
+
+    .cart-text{
+        font-size: 14px !important;
+        color: #6b7280 !important;
+        margin-top: -2px !important;
+    }
+
+    .swal2-icon.swal2-success{
+        transform: scale(.78);
+        margin-top: 5px !important;
+        margin-bottom: -5px !important;
+    }
+
+    .swal2-actions{
+        width: 100%;
+        display: flex !important;
+        justify-content: center;
+        gap: 8px;
+        margin-top: 20px !important;
+    }
+
+    /* tombol kiri putih */
+    .btn-cart-continue{
+        background: #fff !important;
+        border: 1px solid #bdbdbd !important;
+        color: #333 !important;
+        border-radius: 4px !important;
+        padding: 10px 18px !important;
+        min-width: 210px;
+        font-size: 14px !important;
+        font-weight: 500 !important;
+    }
+
+    .btn-cart-continue:hover{
+        background: #f7f7f7 !important;
+    }
+
+    /* tombol kanan hitam */
+    .btn-cart-view{
+        background: #1f2937 !important;
+        border: none !important;
+        color: #fff !important;
+        border-radius: 4px !important;
+        padding: 10px 18px !important;
+        min-width: 210px;
+        font-size: 14px !important;
+        font-weight: 500 !important;
+    }
+
+    .btn-cart-view:hover{
+        background: #111827 !important;
+    }
+
 </style>
 
 <div class="page-wrapper">
@@ -319,4 +384,163 @@
     </div>
 </div>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        // tombol tambah qty
+        document.querySelectorAll('.plus').forEach(button => {
+
+            button.addEventListener('click', function () {
+
+                const card =
+                    this.closest('.bottom-section');
+
+                const qtyDisplay =
+                    card.querySelector('.qty-display');
+
+                const produkId =
+                    qtyDisplay.dataset.id;
+
+                const qtyInput =
+                    document.querySelector(
+                        '.qty-input[data-id="' + produkId + '"]'
+                    );
+
+                let qty =
+                    parseInt(qtyDisplay.textContent);
+
+                const maxStock =
+                    parseInt(this.dataset.max);
+
+                // tambah jika belum melebihi stok
+                if (qty < maxStock) {
+
+                    qty++;
+
+                    qtyDisplay.textContent = qty;
+                    qtyInput.value = qty;
+                }
+            });
+        });
+
+
+        // tombol kurang qty
+        document.querySelectorAll('.minus').forEach(button => {
+
+            button.addEventListener('click', function () {
+
+                const card =
+                    this.closest('.bottom-section');
+
+                const qtyDisplay =
+                    card.querySelector('.qty-display');
+
+                const produkId =
+                    qtyDisplay.dataset.id;
+
+                const qtyInput =
+                    document.querySelector(
+                        '.qty-input[data-id="' + produkId + '"]'
+                    );
+
+                let qty =
+                    parseInt(qtyDisplay.textContent);
+
+                // minimal 1
+                if (qty > 1) {
+
+                    qty--;
+
+                    qtyDisplay.textContent = qty;
+                    qtyInput.value = qty;
+                }
+            });
+        });
+
+    });
+
+    function addToCart(event, produkId) {
+
+        event.preventDefault();
+
+        const form =
+            document.getElementById(
+                'form-' + produkId
+            );
+
+        const formData =
+            new FormData(form);
+
+        fetch(form.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRF-TOKEN':
+                    '{{ csrf_token() }}',
+                'Accept':
+                    'application/json',
+                'X-Requested-With':
+                    'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+
+            if (data.success) {
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil!',
+                    text: 'Produk berhasil ditambahkan ke keranjang',
+                    showCancelButton: true,
+                    confirmButtonText: 'Lihat Keranjang',
+                    cancelButtonText: 'Lanjut Belanja',
+                    reverseButtons: true,
+                    allowOutsideClick: true,
+                    buttonsStyling: false,
+                    width: '500px',
+                    customClass: {
+                        popup: 'cart-popup',
+                        title: 'cart-title',
+                        htmlContainer: 'cart-text',
+                        confirmButton: 'btn-cart-view',
+                        cancelButton: 'btn-cart-continue'
+                    }
+
+                }).then((result) => {
+
+                    if (result.isConfirmed) {
+
+                        window.location.href =
+                            "{{ route('keranjangs.index') }}";
+                    }
+
+                });
+
+            } else {
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal',
+                    text:
+                        'Produk gagal ditambahkan'
+                });
+
+            }
+        })
+        .catch(error => {
+
+            console.error(error);
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text:
+                    'Terjadi kesalahan'
+            });
+        });
+
+        return false;
+    }
+</script>
 @endsection
