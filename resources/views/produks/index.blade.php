@@ -100,7 +100,7 @@
                     </div>
                     <div class="col-md-7">
                         <h3 class="detail-title mb-3" id="detailNama"></h3>
-                        <p class="detail-desc mb-4" id="detailKeterangan"></p>
+                        <p class="detail-desc mb-4" id="detailDeskripsi"></p>
                         <div class="price-box">
                             <span class="price-label">Harga</span>
                             <div class="price-value" id="detailHarga"></div>

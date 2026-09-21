@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class CheckoutController extends Controller
 {
@@ -374,6 +375,24 @@ Terima kasih.";
             'totalHargaAkhir' => $totalBelanja,
         ]);
     }
+    public function detailPaket($id)
+    {
+        $checkout = Checkout::with('user')
+            ->findOrFail($id);
+
+        $produkDetails = $checkout->produk_details ?? [];
+
+        $pdf = Pdf::loadView(
+            'pesanans.detailPaket',
+            compact('checkout', 'produkDetails')
+        );
+
+        $pdf->setPaper([0, 0, 283.46, 425.20], 'portrait');
+
+        return $pdf->stream(
+            'label-paket-'.$checkout->id.'.pdf'
+        );
+    }
     public function inputResi(Request $request, $id)
     {
         $request->validate([
@@ -388,4 +407,5 @@ Terima kasih.";
 
         return back()->with('success', 'Resi berhasil ditambahkan');
     }
+
 }

@@ -46,9 +46,10 @@ Route::get('/auth/google/callback', function () {
         $user = User::firstOrCreate(
             ['email' => $googleUser->getEmail()],
             [
-                'name' => $googleUser->getName(),
-                'phone' => null,
-                'password' => bcrypt('google_login')
+                'name'     => $googleUser->getName(),
+                'phone'    => null,
+                'password' => bcrypt(\Illuminate\Support\Str::random(16)),
+                'role'     => 'pelanggan', // tambahkan ini
             ]
         );
 
@@ -145,4 +146,5 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('/dashboard-penjualan', PenjualanController::class);
     Route::get('/cetak-pdf/penjualan', [PenjualanController::class, 'cetakPdf'])->name('penjualan.cetak_pdf');
     Route::post('/input-resi/{id}', [CheckoutController::class, 'inputResi']);
+    Route::get('/checkouts/{id}/detail-paket', [CheckoutController::class, 'detailPaket'])->name('checkouts.detailPaket');
 });

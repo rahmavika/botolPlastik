@@ -69,6 +69,7 @@
                             <th>Bukti</th>
                             <th>Status Bayar</th>
                             <th>Ubah Bayar</th>
+                            <th>Cetak</th>
                             <th>Aksi</th>
                             <th>Status</th>
                         </tr>
@@ -217,7 +218,18 @@
                                         </form>
 
                                     </td>
+                                    <td class="text-center">
 
+                                        <a href="{{ route('checkouts.detailPaket', $checkout->id) }}"
+                                            target="_blank"
+                                            class="btn btn-sm btn-outline-dark"
+                                            title="Cetak Label Paket">
+
+                                            <i class="bi bi-printer"></i>
+
+                                        </a>
+
+                                    </td>
                                     <td class="text-center">
 
                                         <form action="{{ route('checkouts.updateStatus',$checkout->id) }}"
@@ -607,5 +619,13 @@
         padding:4px 8px;
     }
 </style>
+<script>
+    function cetakPaket(url) {
+        let win = window.open(url, '_blank');
 
+        win.onload = function () {
+            win.print();
+        };
+    }
+</script>
 @endsection
